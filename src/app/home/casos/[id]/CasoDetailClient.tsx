@@ -14,7 +14,7 @@ const ESTADO_COLORS: Record<string, string> = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CasoDetailClient({ caso, estados, analistas, investigadores }: any) {
-  const [activeTab, setActiveTab] = useState<"info" | "afiliados" | "informes" | "seguimientos" | "contabilidad">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "afiliados">("info");
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     id_estado: String(caso.id_estado ?? ""),
@@ -48,9 +48,6 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
   const tabs = [
     { id: "info", label: "Información" },
     { id: "afiliados", label: `Afiliados (${caso.afiliados?.length ?? 0})` },
-    { id: "informes", label: `Informes (${caso.informes?.length ?? 0})` },
-    { id: "seguimientos", label: `Seguimientos (${caso.afiliados?.reduce((s: number, a: { seguimientos?: unknown[] }) => s + (a.seguimientos?.length ?? 0), 0) ?? 0})` },
-    { id: "contabilidad", label: `Facturas (${caso.facturas?.length ?? 0})` },
   ];
 
   return (
@@ -195,82 +192,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
             </div>
           )}
 
-          {activeTab === "informes" && (
-            <div className="space-y-2">
-              {caso.informes?.length === 0 ? (
-                <p className="text-gray-400 text-sm">Sin informes registrados</p>
-              ) : (
-                caso.informes?.map((inf: { id_informe: number; tipoinforme?: { nombre?: string }; estadodocus?: { nombre?: string }; ruta_pdf?: string; ruta_word?: string }) => (
-                  <div key={inf.id_informe} className="flex items-center justify-between border border-gray-200 rounded-lg p-3 text-sm">
-                    <div>
-                      <p className="font-medium text-gray-800">{inf.tipoinforme?.nombre ?? "Informe"}</p>
-                      <p className="text-gray-500 text-xs">{inf.estadodocus?.nombre ?? "—"}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      {inf.ruta_pdf && (
-                        <a href={inf.ruta_pdf} target="_blank" rel="noreferrer"
-                          className="text-red-600 hover:text-red-800 text-xs font-medium">PDF</a>
-                      )}
-                      {inf.ruta_word && (
-                        <a href={inf.ruta_word} target="_blank" rel="noreferrer"
-                          className="text-blue-600 hover:text-blue-800 text-xs font-medium">Word</a>
-                      )}
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
 
-          {activeTab === "seguimientos" && (
-            <div className="space-y-4">
-              {caso.afiliados?.every((a: { seguimientos?: unknown[] }) => !a.seguimientos?.length) ? (
-                <p className="text-gray-400 text-sm">Sin seguimientos registrados</p>
-              ) : (
-                caso.afiliados?.map((afiliado: {
-                  id_afiliado: number; nombre?: string; apellido?: string;
-                  seguimientos?: { id_seguimientos: number; fecha?: string; hora?: string; entidad?: string; nombre_contacto?: string; direccion?: string }[]
-                }) => (
-                  afiliado.seguimientos && afiliado.seguimientos.length > 0 && (
-                    <div key={afiliado.id_afiliado}>
-                      <p className="text-xs font-semibold text-gray-500 mb-2">
-                        Afiliado: {`${afiliado.nombre ?? ""} ${afiliado.apellido ?? ""}`.trim()}
-                      </p>
-                      <div className="space-y-2">
-                        {afiliado.seguimientos.map((s) => (
-                          <div key={s.id_seguimientos} className="border-l-4 border-blue-400 pl-4 py-2 bg-gray-50 rounded-r-lg">
-                            <div className="flex items-center gap-3 mb-1">
-                              <span className="text-xs font-medium text-gray-500">{s.fecha ?? "—"} {s.hora ?? ""}</span>
-                              {s.entidad && <span className="text-xs text-blue-700 font-medium">{s.entidad}</span>}
-                            </div>
-                            {s.nombre_contacto && <p className="text-sm text-gray-800">Contacto: {s.nombre_contacto}</p>}
-                            {s.direccion && <p className="text-xs text-gray-500">📍 {s.direccion}</p>}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                ))
-              )}
-            </div>
-          )}
-
-          {activeTab === "contabilidad" && (
-            <div className="space-y-3">
-              {caso.facturas?.length === 0 ? (
-                <p className="text-gray-400 text-sm">Sin facturas registradas</p>
-              ) : (
-                caso.facturas?.map((f: { n_id_factura: number; n_facturafisica?: number; t_fecha?: string; n_valor_total_a_pagar?: number; b_finalizada?: boolean }) => (
-                  <div key={f.n_id_factura} className="border border-gray-200 rounded-lg p-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                    <InfoRow label="# Factura" value={String(f.n_facturafisica ?? f.n_id_factura)} />
-                    <InfoRow label="Fecha" value={f.t_fecha ? new Date(f.t_fecha).toLocaleDateString("es-CO") : "—"} />
-                    <InfoRow label="Total" value={f.n_valor_total_a_pagar ? `$${Number(f.n_valor_total_a_pagar).toLocaleString("es-CO")}` : "—"} />
-                    <InfoRow label="Estado" value={f.b_finalizada ? "Finalizada" : "Pendiente"} />
-                  </div>
-                ))
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
