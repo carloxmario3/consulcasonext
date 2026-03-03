@@ -132,17 +132,18 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Analista</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Investigador</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">F. Asignación</th>
+                <th className="text-left px-4 py-3 font-semibold text-gray-600">Carpeta</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-10 text-gray-400">Cargando...</td>
+                  <td colSpan={9} className="text-center py-10 text-gray-400">Cargando...</td>
                 </tr>
               ) : casos.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-10 text-gray-400">No se encontraron casos</td>
+                  <td colSpan={9} className="text-center py-10 text-gray-400">No se encontraron casos</td>
                 </tr>
               ) : (
                 casos.map((caso) => (
@@ -189,6 +190,16 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
                       }
                     </td>
                     <td className="px-4 py-3 text-gray-600">{caso.fecha_asignacion ?? "—"}</td>
+                    <td className="px-4 py-3">
+                      <a
+                        href="https://drive.google.com/drive/folders/1gQnvKriHzQNERPY8dAcehIBiYBiTb_Lf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-green-600 hover:text-green-800 font-medium text-xs"
+                      >
+                        Ver carpeta
+                      </a>
+                    </td>
                     <td className="px-4 py-3">
                       <Link
                         href={`/home/casos/${caso.id_numero_caso}`}
