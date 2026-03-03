@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "20");
   const search = searchParams.get("search") ?? "";
   const estado = searchParams.get("estado") ?? "";
+  const tipocaso = searchParams.get("tipocaso") ?? "";
   const skip = (page - 1) * limit;
 
   const where: Record<string, unknown> = {};
@@ -26,6 +27,10 @@ export async function GET(req: NextRequest) {
 
   if (estado) {
     where.id_estado = parseInt(estado);
+  }
+
+  if (tipocaso) {
+    where.id_tipocaso = parseInt(tipocaso);
   }
 
   const [casos, total] = await Promise.all([

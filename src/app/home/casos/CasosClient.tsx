@@ -42,6 +42,7 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [estadoFilter, setEstadoFilter] = useState("");
+  const [tipocasoFilter, setTipocasoFilter] = useState("");
   const [showNew, setShowNew] = useState(false);
 
   const fetchCasos = useCallback(async () => {
@@ -51,13 +52,14 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
       limit: "20",
       search,
       estado: estadoFilter,
+      tipocaso: tipocasoFilter,
     });
     const res = await fetch(`/api/casos?${params}`);
     const data = await res.json();
     setCasos(data.casos);
     setTotal(data.total);
     setLoading(false);
-  }, [page, search, estadoFilter]);
+  }, [page, search, estadoFilter, tipocasoFilter]);
 
   useEffect(() => {
     fetchCasos();
@@ -103,6 +105,16 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
           <option value="">Todos los estados</option>
           {estados.map((e) => (
             <option key={e.id_estado} value={e.id_estado}>{e.nombre}</option>
+          ))}
+        </select>
+        <select
+          value={tipocasoFilter}
+          onChange={(e) => { setTipocasoFilter(e.target.value); setPage(1); }}
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Todos los tipos</option>
+          {tiposCaso.map((t) => (
+            <option key={t.id_tipocaso} value={t.id_tipocaso}>{t.nombre}</option>
           ))}
         </select>
       </div>
