@@ -29,12 +29,20 @@ const ESTADO_COLORS: Record<string, string> = {
 export function CasoDetailClient({ caso, estados, analistas, investigadores }: any) {
   const [activeTab, setActiveTab] = useState<"info" | "afiliados" | "reclamantes">("info");
   const [showNuevoReclamante, setShowNuevoReclamante] = useState(false);
+  const [editingReclamante, setEditingReclamante] = useState<ReclamanteType | null>(null);
+  const [deletingReclamanteId, setDeletingReclamanteId] = useState<number | null>(null);
   const [reclamantes, setReclamantes] = useState<ReclamanteType[]>(caso.reclamantes ?? []);
 
   const reloadReclamantes = async () => {
     const res = await fetch(`/api/casos/${caso.id_numero_caso}/reclamantes`);
     const data = await res.json();
     setReclamantes(data);
+  };
+
+  const handleDeleteReclamante = async (id: number) => {
+    await fetch(`/api/reclamantes/${id}`, { method: "DELETE" });
+    setDeletingReclamanteId(null);
+    reloadReclamantes();
   };
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
@@ -245,15 +253,35 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                 <p className="text-gray-400 text-sm">Sin reclamantes registrados</p>
               ) : (
                 reclamantes.map((r) => (
-                  <div key={r.id_reclamantes} className="border border-gray-200 rounded-lg p-4 grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                    <InfoRow label="Nombre" value={`${r.nombre ?? ""} ${r.apellido ?? ""}`.trim() || "—"} />
-                    <InfoRow label="Parentesco" value={r.parentesco ?? "—"} />
-                    <InfoRow label="Cédula" value={r.cedula ? String(r.cedula) : "—"} />
-                    <InfoRow label="Celular" value={r.celular ? String(r.celular) : "—"} />
-                    <InfoRow label="Teléfono" value={r.telefono ? String(r.telefono) : "—"} />
-                    <InfoRow label="Barrio" value={r.barrio ?? "—"} />
-                    <div className="md:col-span-3">
-                      <InfoRow label="Dirección" value={r.direccion ?? "—"} />
+                  <div key={r.id_reclamantes} className="border border-gray-200 rounded-lg p-4 text-sm">
+                    <div className="flex items-start justify-between mb-3">
+                      <p className="font-semibold text-gray-800">
+                        {`${r.nombre ?? ""} ${r.apellido ?? ""}`.trim() || "—"}
+                        {r.parentesco && <span className="ml-2 text-xs font-normal text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{r.parentesco}</span>}
+                      </p>
+                      <div className="flex gap-2 flex-shrink-0 ml-3">
+                        <button
+                          onClick={() => setEditingReclamante(r)}
+                          className="text-xs text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-300 px-2 py-1 rounded-md transition-colors"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => setDeletingReclamanteId(r.id_reclamantes)}
+                          className="text-xs text-gray-500 hover:text-red-600 border border-gray-200 hover:border-red-300 px-2 py-1 rounded-md transition-colors"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <InfoRow label="Cédula" value={r.cedula ? String(r.cedula) : "—"} />
+                      <InfoRow label="Celular" value={r.celular ? String(r.celular) : "—"} />
+                      <InfoRow label="Teléfono" value={r.telefono ? String(r.telefono) : "—"} />
+                      <InfoRow label="Barrio" value={r.barrio ?? "—"} />
+                      <div className="md:col-span-2">
+                        <InfoRow label="Dirección" value={r.direccion ?? "—"} />
+                      </div>
                     </div>
                   </div>
                 ))
@@ -271,50 +299,93 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
     )}
 
     {showNuevoReclamante && (
-      <NuevoReclamanteModal
+      <ReclamanteModal
         casoId={caso.id_numero_caso}
         onClose={() => setShowNuevoReclamante(false)}
-        onCreated={() => { setShowNuevoReclamante(false); reloadReclamantes(); }}
+        onSaved={() => { setShowNuevoReclamante(false); reloadReclamantes(); }}
       />
+    )}
+
+    {editingReclamante && (
+      <ReclamanteModal
+        casoId={caso.id_numero_caso}
+        initial={editingReclamante}
+        onClose={() => setEditingReclamante(null)}
+        onSaved={() => { setEditingReclamante(null); reloadReclamantes(); }}
+      />
+    )}
+
+    {deletingReclamanteId !== null && (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-xl">
+          <h3 className="text-base font-bold text-gray-900 mb-2">¿Eliminar reclamante?</h3>
+          <p className="text-sm text-gray-500 mb-5">Esta acción no se puede deshacer.</p>
+          <div className="flex justify-end gap-3">
+            <button onClick={() => setDeletingReclamanteId(null)} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+              Cancelar
+            </button>
+            <button onClick={() => handleDeleteReclamante(deletingReclamanteId)} className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
     )}
     </>
   );
 }
 
-function NuevoReclamanteModal({
+function ReclamanteModal({
   casoId,
+  initial,
   onClose,
-  onCreated,
+  onSaved,
 }: {
   casoId: number;
+  initial?: ReclamanteType;
   onClose: () => void;
-  onCreated: () => void;
+  onSaved: () => void;
 }) {
+  const isEdit = !!initial;
   const [form, setForm] = useState({
-    nombre: "", apellido: "", cedula: "", celular: "",
-    telefono: "", parentesco: "", direccion: "", barrio: "",
+    nombre:     initial?.nombre     ?? "",
+    apellido:   initial?.apellido   ?? "",
+    cedula:     initial?.cedula     ? String(initial.cedula) : "",
+    celular:    initial?.celular    ? String(initial.celular) : "",
+    telefono:   initial?.telefono   ? String(initial.telefono) : "",
+    parentesco: initial?.parentesco ?? "",
+    direccion:  initial?.direccion  ?? "",
+    barrio:     initial?.barrio     ?? "",
   });
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    await fetch(`/api/casos/${casoId}/reclamantes`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    if (isEdit) {
+      await fetch(`/api/reclamantes/${initial!.id_reclamantes}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+    } else {
+      await fetch(`/api/casos/${casoId}/reclamantes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+    }
     setSaving(false);
-    onCreated();
+    onSaved();
   };
 
-  const inputCls = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 flex-shrink-0">
-          <h2 className="text-lg font-bold text-gray-900">Nuevo Reclamante</h2>
+          <h2 className="text-lg font-bold text-gray-900">{isEdit ? "Editar Reclamante" : "Nuevo Reclamante"}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -326,41 +397,41 @@ function NuevoReclamanteModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                <input value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} className={inputCls} placeholder="Nombre" />
+                <input value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} className={ic} placeholder="Nombre" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
-                <input value={form.apellido} onChange={e => setForm(f => ({ ...f, apellido: e.target.value }))} className={inputCls} placeholder="Apellido" />
+                <input value={form.apellido} onChange={e => setForm(f => ({ ...f, apellido: e.target.value }))} className={ic} placeholder="Apellido" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Cédula</label>
-                <input type="number" value={form.cedula} onChange={e => setForm(f => ({ ...f, cedula: e.target.value }))} className={inputCls} placeholder="Número de cédula" />
+                <input type="number" value={form.cedula} onChange={e => setForm(f => ({ ...f, cedula: e.target.value }))} className={ic} placeholder="Número de cédula" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Parentesco</label>
-                <input value={form.parentesco} onChange={e => setForm(f => ({ ...f, parentesco: e.target.value }))} className={inputCls} placeholder="Ej: Esposa, Hijo, Madre..." />
+                <input value={form.parentesco} onChange={e => setForm(f => ({ ...f, parentesco: e.target.value }))} className={ic} placeholder="Ej: Esposa, Hijo, Madre..." />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Celular</label>
-                <input type="number" value={form.celular} onChange={e => setForm(f => ({ ...f, celular: e.target.value }))} className={inputCls} placeholder="Celular" />
+                <input type="number" value={form.celular} onChange={e => setForm(f => ({ ...f, celular: e.target.value }))} className={ic} placeholder="Celular" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                <input type="number" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} className={inputCls} placeholder="Teléfono fijo" />
+                <input type="number" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} className={ic} placeholder="Teléfono fijo" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
-                <input value={form.direccion} onChange={e => setForm(f => ({ ...f, direccion: e.target.value }))} className={inputCls} placeholder="Dirección" />
+                <input value={form.direccion} onChange={e => setForm(f => ({ ...f, direccion: e.target.value }))} className={ic} placeholder="Dirección" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Barrio</label>
-                <input value={form.barrio} onChange={e => setForm(f => ({ ...f, barrio: e.target.value }))} className={inputCls} placeholder="Barrio" />
+                <input value={form.barrio} onChange={e => setForm(f => ({ ...f, barrio: e.target.value }))} className={ic} placeholder="Barrio" />
               </div>
             </div>
           </div>
@@ -369,7 +440,7 @@ function NuevoReclamanteModal({
               Cancelar
             </button>
             <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
-              {saving ? "Guardando..." : "Guardar"}
+              {saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Crear"}
             </button>
           </div>
         </form>
