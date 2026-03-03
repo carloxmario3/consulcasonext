@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CaratulaModal } from "./CaratulaModal";
 
 const ESTADO_COLORS: Record<string, string> = {
   Activo: "bg-green-100 text-green-800",
@@ -26,6 +27,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
     observaciones: caso.observaciones ?? "",
   });
   const [saving, setSaving] = useState(false);
+  const [showCaratula, setShowCaratula] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
@@ -51,6 +53,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
   ];
 
   return (
+    <>
     <div className="space-y-5">
       {/* Header */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
@@ -67,16 +70,28 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
               )}
             </div>
           </div>
-          <button
-            onClick={() => setEditing(!editing)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              editing
-                ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {editing ? "Cancelar" : "Editar"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowCaratula(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Imprimir Carátula
+            </button>
+            <button
+              onClick={() => setEditing(!editing)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                editing
+                  ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+            >
+              {editing ? "Cancelar" : "Editar"}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -196,6 +211,11 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
         </div>
       </div>
     </div>
+
+    {showCaratula && (
+      <CaratulaModal caso={caso} onClose={() => setShowCaratula(false)} />
+    )}
+    </>
   );
 }
 
