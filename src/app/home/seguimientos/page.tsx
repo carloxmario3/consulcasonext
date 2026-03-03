@@ -18,7 +18,8 @@ export default async function SeguimientosPage() {
     },
   });
 
-  const data = serializeData(seguimientos);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = serializeData(seguimientos) as any[];
 
   return (
     <div className="space-y-5">
@@ -44,20 +45,7 @@ export default async function SeguimientosPage() {
               {data.length === 0 ? (
                 <tr><td colSpan={6} className="text-center py-8 text-gray-400">Sin registros</td></tr>
               ) : (
-                data.map((s: {
-                  id_seguimientos: number;
-                  fecha?: string | null;
-                  hora?: string | null;
-                  entidad?: string | null;
-                  nombre_contacto?: string | null;
-                  direccion?: string | null;
-                  afiliado?: {
-                    nombre?: string | null;
-                    apellido?: string | null;
-                    cedula?: string | null;
-                    id_numero_caso?: number | null;
-                  } | null;
-                }) => (
+                data.map((s) => (
                   <tr key={s.id_seguimientos} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
                       <p>{s.fecha ?? "—"}</p>
