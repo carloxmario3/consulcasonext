@@ -38,11 +38,13 @@ export async function GET(req: NextRequest) {
       conditions.push({ id_numero_caso: numericSearch });
     }
 
-    // Búsqueda exacta de cédula (BigInt)
+    // Búsqueda exacta por cédula o celular (BigInt)
     try {
-      conditions.push({ afiliados: { some: { cedula: BigInt(search) } } });
+      const bigintVal = BigInt(search);
+      conditions.push({ afiliados: { some: { cedula: bigintVal } } });
+      conditions.push({ afiliados: { some: { celular: bigintVal } } });
     } catch {
-      // no es un número válido para cédula
+      // no es un número válido
     }
 
     where.OR = conditions;
@@ -67,7 +69,7 @@ export async function GET(req: NextRequest) {
         estado: true,
         analista: { select: { nombres: true, apellidos: true } },
         investigador: { select: { nombres: true, apellidos: true } },
-        afiliados: { select: { nombre: true, apellido: true, cedula: true } },
+        afiliados: { select: { nombre: true, apellido: true, cedula: true, celular: true, direccion: true } },
       },
     }),
     prisma.tablaCasos.count({ where }),

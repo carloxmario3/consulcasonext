@@ -22,7 +22,7 @@ interface Caso {
   tipodecaso: TipoCaso | null;
   analista: { nombres: string | null; apellidos: string | null } | null;
   investigador: { nombres: string | null; apellidos: string | null } | null;
-  afiliados: { nombre: string | null; apellido: string | null; cedula: bigint | null }[];
+  afiliados: { nombre: string | null; apellido: string | null; cedula: string | null; celular: string | null; direccion: string | null }[];
 }
 
 const ESTADO_COLORS: Record<string, string> = {
@@ -150,11 +150,25 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
                     <td className="px-4 py-3 font-mono font-semibold text-blue-700">
                       #{caso.id_numero_caso}
                     </td>
-                    <td className="px-4 py-3 text-gray-800">
-                      {caso.afiliados[0]
-                        ? `${caso.afiliados[0].nombre ?? ""} ${caso.afiliados[0].apellido ?? ""}`.trim()
-                        : <span className="text-gray-400">—</span>
-                      }
+                    <td className="px-4 py-3">
+                      {caso.afiliados[0] ? (
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {`${caso.afiliados[0].nombre ?? ""} ${caso.afiliados[0].apellido ?? ""}`.trim() || "—"}
+                          </p>
+                          {caso.afiliados[0].cedula && (
+                            <p className="text-xs text-gray-500">CC: {caso.afiliados[0].cedula}</p>
+                          )}
+                          {caso.afiliados[0].celular && (
+                            <p className="text-xs text-gray-500">Cel: {caso.afiliados[0].celular}</p>
+                          )}
+                          {caso.afiliados[0].direccion && (
+                            <p className="text-xs text-gray-400 truncate max-w-xs">{caso.afiliados[0].direccion}</p>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{caso.tipodecaso?.nombre ?? "—"}</td>
                     <td className="px-4 py-3">
