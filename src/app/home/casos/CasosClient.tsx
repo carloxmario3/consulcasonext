@@ -252,13 +252,23 @@ function NuevoCasoModal({
   onClose: () => void;
   onCreated: () => void;
 }) {
-  const [form, setForm] = useState({
+  const [tab, setTab] = useState<"caso" | "afiliado">("caso");
+  const [casoForm, setCasoForm] = useState({
     id_tipocaso: "",
     id_estado: "1",
     id_analista: "",
     fecha_asignacion: "",
     fecha_posibleentrega: "",
     observaciones: "",
+  });
+  const [afiliadoForm, setAfiliadoForm] = useState({
+    nombre: "",
+    apellido: "",
+    cedula: "",
+    celular: "",
+    telefono: "",
+    direccion: "",
+    barrio: "",
   });
   const [saving, setSaving] = useState(false);
   const [analistas, setAnalistas] = useState<{ id_analista: number; nombres: string | null; apellidos: string | null }[]>([]);
@@ -274,20 +284,24 @@ function NuevoCasoModal({
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ...form,
-        id_tipocaso: form.id_tipocaso ? parseInt(form.id_tipocaso) : null,
-        id_estado: form.id_estado ? parseInt(form.id_estado) : 1,
-        id_analista: form.id_analista ? parseInt(form.id_analista) : null,
+        ...casoForm,
+        id_tipocaso: casoForm.id_tipocaso ? parseInt(casoForm.id_tipocaso) : null,
+        id_estado: casoForm.id_estado ? parseInt(casoForm.id_estado) : 1,
+        id_analista: casoForm.id_analista ? parseInt(casoForm.id_analista) : null,
+        afiliado: (afiliadoForm.nombre || afiliadoForm.apellido || afiliadoForm.cedula) ? afiliadoForm : null,
       }),
     });
     setSaving(false);
     onCreated();
   };
 
+  const inputCls = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl">
-        <div className="flex items-center justify-between mb-5">
+      <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl flex flex-col max-h-[90vh]">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 flex-shrink-0">
           <h2 className="text-lg font-bold text-gray-900">Nuevo Caso</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,86 +309,131 @@ function NuevoCasoModal({
             </svg>
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Caso</label>
-              <select
-                value={form.id_tipocaso}
-                onChange={e => setForm(f => ({ ...f, id_tipocaso: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Seleccionar...</option>
-                {tiposCaso.map(t => (
-                  <option key={t.id_tipocaso} value={t.id_tipocaso}>{t.nombre}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-              <select
-                value={form.id_estado}
-                onChange={e => setForm(f => ({ ...f, id_estado: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {estados.map(e => (
-                  <option key={e.id_estado} value={e.id_estado}>{e.nombre}</option>
-                ))}
-              </select>
-            </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200 flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => setTab("caso")}
+            className={`px-6 py-2.5 text-sm font-medium transition-colors ${tab === "caso" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            Datos del Caso
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab("afiliado")}
+            className={`px-6 py-2.5 text-sm font-medium transition-colors ${tab === "afiliado" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            Afiliado
+          </button>
+        </div>
+
+        {/* Body */}
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+          <div className="overflow-y-auto flex-1 px-6 py-5">
+
+            {tab === "caso" && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Caso</label>
+                    <select value={casoForm.id_tipocaso} onChange={e => setCasoForm(f => ({ ...f, id_tipocaso: e.target.value }))} className={inputCls} required>
+                      <option value="">Seleccionar...</option>
+                      {tiposCaso.map(t => <option key={t.id_tipocaso} value={t.id_tipocaso}>{t.nombre}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <select value={casoForm.id_estado} onChange={e => setCasoForm(f => ({ ...f, id_estado: e.target.value }))} className={inputCls}>
+                      {estados.map(e => <option key={e.id_estado} value={e.id_estado}>{e.nombre}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Analista</label>
+                  <select value={casoForm.id_analista} onChange={e => setCasoForm(f => ({ ...f, id_analista: e.target.value }))} className={inputCls}>
+                    <option value="">Sin asignar</option>
+                    {analistas.map(a => <option key={a.id_analista} value={a.id_analista}>{`${a.nombres ?? ""} ${a.apellidos ?? ""}`.trim()}</option>)}
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">F. Asignación</label>
+                    <input type="date" value={casoForm.fecha_asignacion} onChange={e => setCasoForm(f => ({ ...f, fecha_asignacion: e.target.value }))} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">F. Posible Entrega</label>
+                    <input type="date" value={casoForm.fecha_posibleentrega} onChange={e => setCasoForm(f => ({ ...f, fecha_posibleentrega: e.target.value }))} className={inputCls} />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
+                  <textarea value={casoForm.observaciones} onChange={e => setCasoForm(f => ({ ...f, observaciones: e.target.value }))} rows={3} className={`${inputCls} resize-none`} />
+                </div>
+              </div>
+            )}
+
+            {tab === "afiliado" && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                    <input value={afiliadoForm.nombre} onChange={e => setAfiliadoForm(f => ({ ...f, nombre: e.target.value }))} className={inputCls} placeholder="Nombre" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+                    <input value={afiliadoForm.apellido} onChange={e => setAfiliadoForm(f => ({ ...f, apellido: e.target.value }))} className={inputCls} placeholder="Apellido" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Cédula</label>
+                    <input type="number" value={afiliadoForm.cedula} onChange={e => setAfiliadoForm(f => ({ ...f, cedula: e.target.value }))} className={inputCls} placeholder="Número de cédula" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Celular</label>
+                    <input type="number" value={afiliadoForm.celular} onChange={e => setAfiliadoForm(f => ({ ...f, celular: e.target.value }))} className={inputCls} placeholder="Celular" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <input type="number" value={afiliadoForm.telefono} onChange={e => setAfiliadoForm(f => ({ ...f, telefono: e.target.value }))} className={inputCls} placeholder="Teléfono fijo" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Barrio</label>
+                    <input value={afiliadoForm.barrio} onChange={e => setAfiliadoForm(f => ({ ...f, barrio: e.target.value }))} className={inputCls} placeholder="Barrio" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                  <input value={afiliadoForm.direccion} onChange={e => setAfiliadoForm(f => ({ ...f, direccion: e.target.value }))} className={inputCls} placeholder="Dirección completa" />
+                </div>
+              </div>
+            )}
+
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Analista</label>
-            <select
-              value={form.id_analista}
-              onChange={e => setForm(f => ({ ...f, id_analista: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Sin asignar</option>
-              {analistas.map(a => (
-                <option key={a.id_analista} value={a.id_analista}>
-                  {`${a.nombres ?? ""} ${a.apellidos ?? ""}`.trim()}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">F. Asignación</label>
-              <input
-                type="date"
-                value={form.fecha_asignacion}
-                onChange={e => setForm(f => ({ ...f, fecha_asignacion: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+
+          {/* Footer */}
+          <div className="flex justify-between items-center px-6 py-4 border-t border-gray-200 flex-shrink-0">
+            <div className="flex gap-1">
+              <button type="button" onClick={() => setTab("caso")} className={`w-2 h-2 rounded-full transition-colors ${tab === "caso" ? "bg-blue-600" : "bg-gray-300"}`} />
+              <button type="button" onClick={() => setTab("afiliado")} className={`w-2 h-2 rounded-full transition-colors ${tab === "afiliado" ? "bg-blue-600" : "bg-gray-300"}`} />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">F. Posible Entrega</label>
-              <input
-                type="date"
-                value={form.fecha_posibleentrega}
-                onChange={e => setForm(f => ({ ...f, fecha_posibleentrega: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <div className="flex gap-3">
+              <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+                Cancelar
+              </button>
+              {tab === "caso" ? (
+                <button type="button" onClick={() => setTab("afiliado")} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                  Siguiente →
+                </button>
+              ) : (
+                <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+                  {saving ? "Guardando..." : "Crear Caso"}
+                </button>
+              )}
             </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
-            <textarea
-              value={form.observaciones}
-              onChange={e => setForm(f => ({ ...f, observaciones: e.target.value }))}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-          </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-              Cancelar
-            </button>
-            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
-              {saving ? "Guardando..." : "Crear Caso"}
-            </button>
           </div>
         </form>
       </div>

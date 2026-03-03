@@ -90,12 +90,29 @@ export async function POST(req: NextRequest) {
       id_estado: data.id_estado ?? 1,
       id_analista: data.id_analista,
       id_investigador: data.id_investigador,
-      fecha_asignacion: data.fecha_asignacion,
-      fecha_posibleentrega: data.fecha_posibleentrega,
-      observaciones: data.observaciones,
+      fecha_asignacion: data.fecha_asignacion || null,
+      fecha_posibleentrega: data.fecha_posibleentrega || null,
+      observaciones: data.observaciones || null,
       ciudad: data.ciudad,
     },
   });
 
-  return NextResponse.json(caso, { status: 201 });
+  // Crear afiliado si se enviaron datos
+  if (data.afiliado && (data.afiliado.nombre || data.afiliado.apellido || data.afiliado.cedula)) {
+    const af = data.afiliado;
+    await prisma.tablaAfiliado.create({
+      data: {
+        id_numero_caso: caso.id_numero_caso,
+        nombre: af.nombre || null,
+        apellido: af.apellido || null,
+        cedula: af.cedula ? BigInt(af.cedula) : null,
+        celular: af.celular ? BigInt(af.celular) : null,
+        telefono: af.telefono ? parseInt(af.telefono) : null,
+        direccion: af.direccion || null,
+        barrio: af.barrio || null,
+      },
+    });
+  }
+
+  return NextResponse.json(serializeData(caso), { status: 201 });
 }
