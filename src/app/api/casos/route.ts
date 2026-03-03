@@ -19,10 +19,33 @@ export async function GET(req: NextRequest) {
   const where: Record<string, unknown> = {};
 
   if (search) {
-    where.OR = [
-      { id_numero_caso: isNaN(parseInt(search)) ? undefined : parseInt(search) },
+    const numericSearch = parseInt(search);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const conditions: any[] = [
       { observaciones: { contains: search, mode: "insensitive" } },
-    ].filter((c) => Object.values(c).some((v) => v !== undefined));
+      { fecha_asignacion: { contains: search, mode: "insensitive" } },
+      { afiliados: { some: { nombre: { contains: search, mode: "insensitive" } } } },
+      { afiliados: { some: { apellido: { contains: search, mode: "insensitive" } } } },
+      { afiliados: { some: { direccion: { contains: search, mode: "insensitive" } } } },
+      { afiliados: { some: { barrio: { contains: search, mode: "insensitive" } } } },
+      { analista: { nombres: { contains: search, mode: "insensitive" } } },
+      { analista: { apellidos: { contains: search, mode: "insensitive" } } },
+      { investigador: { nombres: { contains: search, mode: "insensitive" } } },
+      { investigador: { apellidos: { contains: search, mode: "insensitive" } } },
+    ];
+
+    if (!isNaN(numericSearch)) {
+      conditions.push({ id_numero_caso: numericSearch });
+    }
+
+    // Búsqueda exacta de cédula (BigInt)
+    try {
+      conditions.push({ afiliados: { some: { cedula: BigInt(search) } } });
+    } catch {
+      // no es un número válido para cédula
+    }
+
+    where.OR = conditions;
   }
 
   if (estado) {
