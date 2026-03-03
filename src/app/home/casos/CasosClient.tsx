@@ -241,6 +241,16 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
   );
 }
 
+type ReclamanteForm = {
+  nombre: string; apellido: string; cedula: string; parentesco: string;
+  celular: string; telefono: string; direccion: string; barrio: string;
+};
+
+const emptyReclamante = (): ReclamanteForm => ({
+  nombre: "", apellido: "", cedula: "", parentesco: "",
+  celular: "", telefono: "", direccion: "", barrio: "",
+});
+
 function NuevoCasoModal({
   estados,
   tiposCaso,
@@ -252,30 +262,27 @@ function NuevoCasoModal({
   onClose: () => void;
   onCreated: () => void;
 }) {
-  const [tab, setTab] = useState<"caso" | "afiliado">("caso");
+  const tabs = ["caso", "afiliado", "reclamantes"] as const;
+  const [tab, setTab] = useState<typeof tabs[number]>("caso");
   const [casoForm, setCasoForm] = useState({
-    id_tipocaso: "",
-    id_estado: "1",
-    id_analista: "",
-    fecha_asignacion: "",
-    fecha_posibleentrega: "",
-    observaciones: "",
+    id_tipocaso: "", id_estado: "1", id_analista: "",
+    fecha_asignacion: "", fecha_posibleentrega: "", observaciones: "",
   });
   const [afiliadoForm, setAfiliadoForm] = useState({
-    nombre: "",
-    apellido: "",
-    cedula: "",
-    celular: "",
-    telefono: "",
-    direccion: "",
-    barrio: "",
+    nombre: "", apellido: "", cedula: "", celular: "", telefono: "", direccion: "", barrio: "",
   });
+  const [reclamantes, setReclamantes] = useState<ReclamanteForm[]>([]);
   const [saving, setSaving] = useState(false);
   const [analistas, setAnalistas] = useState<{ id_analista: number; nombres: string | null; apellidos: string | null }[]>([]);
 
   useEffect(() => {
     fetch("/api/analistas").then(r => r.json()).then(setAnalistas);
   }, []);
+
+  const addReclamante = () => setReclamantes(rs => [...rs, emptyReclamante()]);
+  const removeReclamante = (i: number) => setReclamantes(rs => rs.filter((_, idx) => idx !== i));
+  const updateReclamante = (i: number, field: keyof ReclamanteForm, value: string) =>
+    setReclamantes(rs => rs.map((r, idx) => idx === i ? { ...r, [field]: value } : r));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -289,13 +296,17 @@ function NuevoCasoModal({
         id_estado: casoForm.id_estado ? parseInt(casoForm.id_estado) : 1,
         id_analista: casoForm.id_analista ? parseInt(casoForm.id_analista) : null,
         afiliado: (afiliadoForm.nombre || afiliadoForm.apellido || afiliadoForm.cedula) ? afiliadoForm : null,
+        reclamantes: reclamantes.filter(r => r.nombre || r.apellido || r.cedula),
       }),
     });
     setSaving(false);
     onCreated();
   };
 
-  const inputCls = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const tabIdx = tabs.indexOf(tab);
+  const isLast = tabIdx === tabs.length - 1;
+  const isFirst = tabIdx === 0;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -311,21 +322,13 @@ function NuevoCasoModal({
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 flex-shrink-0">
-          <button
-            type="button"
-            onClick={() => setTab("caso")}
-            className={`px-6 py-2.5 text-sm font-medium transition-colors ${tab === "caso" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"}`}
-          >
-            Datos del Caso
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab("afiliado")}
-            className={`px-6 py-2.5 text-sm font-medium transition-colors ${tab === "afiliado" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"}`}
-          >
-            Afiliado
-          </button>
+        <div className="flex border-b border-gray-200 flex-shrink-0 text-sm">
+          {[["caso", "Datos del Caso"], ["afiliado", "Afiliado"], ["reclamantes", `Reclamantes${reclamantes.length ? ` (${reclamantes.length})` : ""}`]].map(([id, label]) => (
+            <button key={id} type="button" onClick={() => setTab(id as typeof tabs[number])}
+              className={`px-5 py-2.5 font-medium transition-colors whitespace-nowrap ${tab === id ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"}`}>
+              {label}
+            </button>
+          ))}
         </div>
 
         {/* Body */}
@@ -337,21 +340,21 @@ function NuevoCasoModal({
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Caso</label>
-                    <select value={casoForm.id_tipocaso} onChange={e => setCasoForm(f => ({ ...f, id_tipocaso: e.target.value }))} className={inputCls} required>
+                    <select value={casoForm.id_tipocaso} onChange={e => setCasoForm(f => ({ ...f, id_tipocaso: e.target.value }))} className={ic} required>
                       <option value="">Seleccionar...</option>
                       {tiposCaso.map(t => <option key={t.id_tipocaso} value={t.id_tipocaso}>{t.nombre}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                    <select value={casoForm.id_estado} onChange={e => setCasoForm(f => ({ ...f, id_estado: e.target.value }))} className={inputCls}>
+                    <select value={casoForm.id_estado} onChange={e => setCasoForm(f => ({ ...f, id_estado: e.target.value }))} className={ic}>
                       {estados.map(e => <option key={e.id_estado} value={e.id_estado}>{e.nombre}</option>)}
                     </select>
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Analista</label>
-                  <select value={casoForm.id_analista} onChange={e => setCasoForm(f => ({ ...f, id_analista: e.target.value }))} className={inputCls}>
+                  <select value={casoForm.id_analista} onChange={e => setCasoForm(f => ({ ...f, id_analista: e.target.value }))} className={ic}>
                     <option value="">Sin asignar</option>
                     {analistas.map(a => <option key={a.id_analista} value={a.id_analista}>{`${a.nombres ?? ""} ${a.apellidos ?? ""}`.trim()}</option>)}
                   </select>
@@ -359,16 +362,16 @@ function NuevoCasoModal({
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">F. Asignación</label>
-                    <input type="date" value={casoForm.fecha_asignacion} onChange={e => setCasoForm(f => ({ ...f, fecha_asignacion: e.target.value }))} className={inputCls} />
+                    <input type="date" value={casoForm.fecha_asignacion} onChange={e => setCasoForm(f => ({ ...f, fecha_asignacion: e.target.value }))} className={ic} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">F. Posible Entrega</label>
-                    <input type="date" value={casoForm.fecha_posibleentrega} onChange={e => setCasoForm(f => ({ ...f, fecha_posibleentrega: e.target.value }))} className={inputCls} />
+                    <input type="date" value={casoForm.fecha_posibleentrega} onChange={e => setCasoForm(f => ({ ...f, fecha_posibleentrega: e.target.value }))} className={ic} />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
-                  <textarea value={casoForm.observaciones} onChange={e => setCasoForm(f => ({ ...f, observaciones: e.target.value }))} rows={3} className={`${inputCls} resize-none`} />
+                  <textarea value={casoForm.observaciones} onChange={e => setCasoForm(f => ({ ...f, observaciones: e.target.value }))} rows={3} className={`${ic} resize-none`} />
                 </div>
               </div>
             )}
@@ -378,37 +381,105 @@ function NuevoCasoModal({
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                    <input value={afiliadoForm.nombre} onChange={e => setAfiliadoForm(f => ({ ...f, nombre: e.target.value }))} className={inputCls} placeholder="Nombre" />
+                    <input value={afiliadoForm.nombre} onChange={e => setAfiliadoForm(f => ({ ...f, nombre: e.target.value }))} className={ic} placeholder="Nombre" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
-                    <input value={afiliadoForm.apellido} onChange={e => setAfiliadoForm(f => ({ ...f, apellido: e.target.value }))} className={inputCls} placeholder="Apellido" />
+                    <input value={afiliadoForm.apellido} onChange={e => setAfiliadoForm(f => ({ ...f, apellido: e.target.value }))} className={ic} placeholder="Apellido" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Cédula</label>
-                    <input type="number" value={afiliadoForm.cedula} onChange={e => setAfiliadoForm(f => ({ ...f, cedula: e.target.value }))} className={inputCls} placeholder="Número de cédula" />
+                    <input type="number" value={afiliadoForm.cedula} onChange={e => setAfiliadoForm(f => ({ ...f, cedula: e.target.value }))} className={ic} placeholder="Número de cédula" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Celular</label>
-                    <input type="number" value={afiliadoForm.celular} onChange={e => setAfiliadoForm(f => ({ ...f, celular: e.target.value }))} className={inputCls} placeholder="Celular" />
+                    <input type="number" value={afiliadoForm.celular} onChange={e => setAfiliadoForm(f => ({ ...f, celular: e.target.value }))} className={ic} placeholder="Celular" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                    <input type="number" value={afiliadoForm.telefono} onChange={e => setAfiliadoForm(f => ({ ...f, telefono: e.target.value }))} className={inputCls} placeholder="Teléfono fijo" />
+                    <input type="number" value={afiliadoForm.telefono} onChange={e => setAfiliadoForm(f => ({ ...f, telefono: e.target.value }))} className={ic} placeholder="Teléfono fijo" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Barrio</label>
-                    <input value={afiliadoForm.barrio} onChange={e => setAfiliadoForm(f => ({ ...f, barrio: e.target.value }))} className={inputCls} placeholder="Barrio" />
+                    <input value={afiliadoForm.barrio} onChange={e => setAfiliadoForm(f => ({ ...f, barrio: e.target.value }))} className={ic} placeholder="Barrio" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
-                  <input value={afiliadoForm.direccion} onChange={e => setAfiliadoForm(f => ({ ...f, direccion: e.target.value }))} className={inputCls} placeholder="Dirección completa" />
+                  <input value={afiliadoForm.direccion} onChange={e => setAfiliadoForm(f => ({ ...f, direccion: e.target.value }))} className={ic} placeholder="Dirección completa" />
                 </div>
+              </div>
+            )}
+
+            {tab === "reclamantes" && (
+              <div className="space-y-4">
+                {reclamantes.length === 0 && (
+                  <p className="text-sm text-gray-400 text-center py-4">Sin reclamantes. Haz clic en &quot;Agregar&quot; para añadir uno.</p>
+                )}
+                {reclamantes.map((r, i) => (
+                  <div key={i} className="border border-gray-200 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Reclamante {i + 1}</span>
+                      <button type="button" onClick={() => removeReclamante(i)} className="text-red-400 hover:text-red-600 text-xs font-medium flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Eliminar
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Nombre</label>
+                        <input value={r.nombre} onChange={e => updateReclamante(i, "nombre", e.target.value)} className={ic} placeholder="Nombre" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Apellido</label>
+                        <input value={r.apellido} onChange={e => updateReclamante(i, "apellido", e.target.value)} className={ic} placeholder="Apellido" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Cédula</label>
+                        <input type="number" value={r.cedula} onChange={e => updateReclamante(i, "cedula", e.target.value)} className={ic} placeholder="Cédula" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Parentesco</label>
+                        <input value={r.parentesco} onChange={e => updateReclamante(i, "parentesco", e.target.value)} className={ic} placeholder="Ej: Esposa, Hijo..." />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Celular</label>
+                        <input type="number" value={r.celular} onChange={e => updateReclamante(i, "celular", e.target.value)} className={ic} placeholder="Celular" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Teléfono</label>
+                        <input type="number" value={r.telefono} onChange={e => updateReclamante(i, "telefono", e.target.value)} className={ic} placeholder="Teléfono fijo" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Dirección</label>
+                        <input value={r.direccion} onChange={e => updateReclamante(i, "direccion", e.target.value)} className={ic} placeholder="Dirección" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Barrio</label>
+                        <input value={r.barrio} onChange={e => updateReclamante(i, "barrio", e.target.value)} className={ic} placeholder="Barrio" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button type="button" onClick={addReclamante}
+                  className="w-full py-2.5 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Agregar reclamante
+                </button>
               </div>
             )}
 
@@ -417,20 +488,27 @@ function NuevoCasoModal({
           {/* Footer */}
           <div className="flex justify-between items-center px-6 py-4 border-t border-gray-200 flex-shrink-0">
             <div className="flex gap-1">
-              <button type="button" onClick={() => setTab("caso")} className={`w-2 h-2 rounded-full transition-colors ${tab === "caso" ? "bg-blue-600" : "bg-gray-300"}`} />
-              <button type="button" onClick={() => setTab("afiliado")} className={`w-2 h-2 rounded-full transition-colors ${tab === "afiliado" ? "bg-blue-600" : "bg-gray-300"}`} />
+              {tabs.map(t => (
+                <button key={t} type="button" onClick={() => setTab(t)}
+                  className={`w-2 h-2 rounded-full transition-colors ${tab === t ? "bg-blue-600" : "bg-gray-300"}`} />
+              ))}
             </div>
             <div className="flex gap-3">
               <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
                 Cancelar
               </button>
-              {tab === "caso" ? (
-                <button type="button" onClick={() => setTab("afiliado")} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-                  Siguiente →
+              {!isFirst && (
+                <button type="button" onClick={() => setTab(tabs[tabIdx - 1])} className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  ← Anterior
                 </button>
-              ) : (
+              )}
+              {isLast ? (
                 <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
                   {saving ? "Guardando..." : "Crear Caso"}
+                </button>
+              ) : (
+                <button type="button" onClick={() => setTab(tabs[tabIdx + 1])} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                  Siguiente →
                 </button>
               )}
             </div>

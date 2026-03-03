@@ -114,5 +114,25 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // Crear reclamantes si se enviaron
+  if (Array.isArray(data.reclamantes) && data.reclamantes.length > 0) {
+    for (const rec of data.reclamantes) {
+      if (!rec.nombre && !rec.apellido && !rec.cedula) continue;
+      await prisma.tablaReclamantes.create({
+        data: {
+          id_numero_caso: caso.id_numero_caso,
+          nombre: rec.nombre || null,
+          apellido: rec.apellido || null,
+          cedula: rec.cedula ? BigInt(rec.cedula) : null,
+          celular: rec.celular ? BigInt(rec.celular) : null,
+          telefono: rec.telefono ? parseInt(rec.telefono) : null,
+          parentesco: rec.parentesco || null,
+          direccion: rec.direccion || null,
+          barrio: rec.barrio || null,
+        },
+      });
+    }
+  }
+
   return NextResponse.json(serializeData(caso), { status: 201 });
 }
