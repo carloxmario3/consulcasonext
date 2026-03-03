@@ -3,6 +3,18 @@
 import { useState } from "react";
 import { CaratulaModal } from "./CaratulaModal";
 
+interface ReclamanteType {
+  id_reclamantes: number;
+  nombre?: string | null;
+  apellido?: string | null;
+  cedula?: string | null;
+  celular?: string | null;
+  telefono?: number | null;
+  parentesco?: string | null;
+  direccion?: string | null;
+  barrio?: string | null;
+}
+
 const ESTADO_COLORS: Record<string, string> = {
   Activo: "bg-green-100 text-green-800",
   Completo: "bg-blue-100 text-blue-800",
@@ -15,7 +27,15 @@ const ESTADO_COLORS: Record<string, string> = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CasoDetailClient({ caso, estados, analistas, investigadores }: any) {
-  const [activeTab, setActiveTab] = useState<"info" | "afiliados">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "afiliados" | "reclamantes">("info");
+  const [showNuevoReclamante, setShowNuevoReclamante] = useState(false);
+  const [reclamantes, setReclamantes] = useState<ReclamanteType[]>(caso.reclamantes ?? []);
+
+  const reloadReclamantes = async () => {
+    const res = await fetch(`/api/casos/${caso.id_numero_caso}/reclamantes`);
+    const data = await res.json();
+    setReclamantes(data);
+  };
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     id_estado: String(caso.id_estado ?? ""),
@@ -50,6 +70,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
   const tabs = [
     { id: "info", label: "Información" },
     { id: "afiliados", label: `Afiliados (${caso.afiliados?.length ?? 0})` },
+    { id: "reclamantes", label: `Reclamantes (${reclamantes.length})` },
   ];
 
   return (
@@ -207,6 +228,39 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
             </div>
           )}
 
+          {activeTab === "reclamantes" && (
+            <div className="space-y-3">
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowNuevoReclamante(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Agregar Reclamante
+                </button>
+              </div>
+              {reclamantes.length === 0 ? (
+                <p className="text-gray-400 text-sm">Sin reclamantes registrados</p>
+              ) : (
+                reclamantes.map((r) => (
+                  <div key={r.id_reclamantes} className="border border-gray-200 rounded-lg p-4 grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                    <InfoRow label="Nombre" value={`${r.nombre ?? ""} ${r.apellido ?? ""}`.trim() || "—"} />
+                    <InfoRow label="Parentesco" value={r.parentesco ?? "—"} />
+                    <InfoRow label="Cédula" value={r.cedula ? String(r.cedula) : "—"} />
+                    <InfoRow label="Celular" value={r.celular ? String(r.celular) : "—"} />
+                    <InfoRow label="Teléfono" value={r.telefono ? String(r.telefono) : "—"} />
+                    <InfoRow label="Barrio" value={r.barrio ?? "—"} />
+                    <div className="md:col-span-3">
+                      <InfoRow label="Dirección" value={r.direccion ?? "—"} />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
 
         </div>
       </div>
@@ -215,7 +269,112 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
     {showCaratula && (
       <CaratulaModal caso={caso} onClose={() => setShowCaratula(false)} />
     )}
+
+    {showNuevoReclamante && (
+      <NuevoReclamanteModal
+        casoId={caso.id_numero_caso}
+        onClose={() => setShowNuevoReclamante(false)}
+        onCreated={() => { setShowNuevoReclamante(false); reloadReclamantes(); }}
+      />
+    )}
     </>
+  );
+}
+
+function NuevoReclamanteModal({
+  casoId,
+  onClose,
+  onCreated,
+}: {
+  casoId: number;
+  onClose: () => void;
+  onCreated: () => void;
+}) {
+  const [form, setForm] = useState({
+    nombre: "", apellido: "", cedula: "", celular: "",
+    telefono: "", parentesco: "", direccion: "", barrio: "",
+  });
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    await fetch(`/api/casos/${casoId}/reclamantes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    setSaving(false);
+    onCreated();
+  };
+
+  const inputCls = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl flex flex-col max-h-[90vh]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 flex-shrink-0">
+          <h2 className="text-lg font-bold text-gray-900">Nuevo Reclamante</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+          <div className="overflow-y-auto flex-1 px-6 py-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                <input value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} className={inputCls} placeholder="Nombre" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+                <input value={form.apellido} onChange={e => setForm(f => ({ ...f, apellido: e.target.value }))} className={inputCls} placeholder="Apellido" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Cédula</label>
+                <input type="number" value={form.cedula} onChange={e => setForm(f => ({ ...f, cedula: e.target.value }))} className={inputCls} placeholder="Número de cédula" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Parentesco</label>
+                <input value={form.parentesco} onChange={e => setForm(f => ({ ...f, parentesco: e.target.value }))} className={inputCls} placeholder="Ej: Esposa, Hijo, Madre..." />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Celular</label>
+                <input type="number" value={form.celular} onChange={e => setForm(f => ({ ...f, celular: e.target.value }))} className={inputCls} placeholder="Celular" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                <input type="number" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} className={inputCls} placeholder="Teléfono fijo" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                <input value={form.direccion} onChange={e => setForm(f => ({ ...f, direccion: e.target.value }))} className={inputCls} placeholder="Dirección" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Barrio</label>
+                <input value={form.barrio} onChange={e => setForm(f => ({ ...f, barrio: e.target.value }))} className={inputCls} placeholder="Barrio" />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 flex-shrink-0">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+              Cancelar
+            </button>
+            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+              {saving ? "Guardando..." : "Guardar"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 

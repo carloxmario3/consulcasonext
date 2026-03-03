@@ -89,6 +89,7 @@ model TablaCasos {
   afiliados     TablaAfiliado[]
   informes      TablaInformes[]
   facturas      TblFacturas[]
+  reclamantes   TablaReclamantes[]
 
   @@map("tabla_casos")
 }
@@ -251,6 +252,26 @@ model TablaOficina {
   analistas TablaAnalista[]
 
   @@map("tabla_oficina")
+}
+
+model TablaReclamantes {
+  id_reclamantes Int     @id @default(autoincrement())
+  id_laborales   Int?
+  id_afiliado    Int?
+  id_numero_caso Int?
+  apellido       String?
+  barrio         String? @db.VarChar(50)
+  cedula         BigInt?
+  celular        BigInt?
+  ciudad         Int?
+  direccion      String?
+  nombre         String?
+  parentesco     String? @db.VarChar(50)
+  telefono       Int?
+
+  caso TablaCasos? @relation(fields: [id_numero_caso], references: [id_numero_caso])
+
+  @@map("tabla_reclamantes")
 }
 
 model TablaSeguimientos {

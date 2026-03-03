@@ -23,6 +23,7 @@ export default async function CasoDetailPage({ params }: { params: Promise<{ id:
         },
         informes: { include: { tipoinforme: true, estadodocus: true }, orderBy: { id_informe: "desc" } },
         facturas: { orderBy: { n_id_factura: "desc" } },
+        reclamantes: { orderBy: { id_reclamantes: "asc" } },
       },
     }),
     prisma.tablaEstado.findMany({ orderBy: { id_estado: "asc" } }),
