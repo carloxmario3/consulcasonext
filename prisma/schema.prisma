@@ -1,0 +1,324 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AspnetUsers {
+  applicationid       String               @db.Uuid
+  userid              String               @id @db.Uuid
+  username            String               @db.VarChar(256)
+  loweredusername     String               @db.VarChar(256)
+  mobilealias         String?              @db.VarChar(16)
+  isanonymous         Boolean
+  lastactivitydate    DateTime             @db.Timestamp(6)
+  membership          AspnetMembership?
+  usersinroles        AspnetUsersinroles[]
+
+  @@map("aspnet_users")
+}
+
+model AspnetMembership {
+  applicationid                          String       @db.Uuid
+  userid                                 String       @id @db.Uuid
+  password                               String       @db.VarChar(128)
+  passwordformat                         Int
+  passwordsalt                           String       @db.VarChar(128)
+  mobilepin                              String?      @db.VarChar(16)
+  email                                  String?      @db.VarChar(256)
+  loweredemail                           String?      @db.VarChar(256)
+  passwordquestion                       String?      @db.VarChar(256)
+  passwordanswer                         String?      @db.VarChar(128)
+  isapproved                             Boolean
+  islockedout                            Boolean
+  createdate                             DateTime     @db.Timestamp(6)
+  lastlogindate                          DateTime     @db.Timestamp(6)
+  lastpasswordchangeddate                DateTime     @db.Timestamp(6)
+  lastlockoutdate                        DateTime     @db.Timestamp(6)
+  failedpasswordattemptcount             Int
+  failedpasswordattemptwindowstart       DateTime     @db.Timestamp(6)
+  failedpasswordanswerattemptcount       Int
+  failedpasswordanswerattemptwindowstart DateTime     @db.Timestamp(6)
+  comment                                String?
+  user                                   AspnetUsers  @relation(fields: [userid], references: [userid])
+
+  @@map("aspnet_membership")
+}
+
+model AspnetRoles {
+  applicationid    String               @db.Uuid
+  roleid           String               @id @db.Uuid
+  rolename         String               @db.VarChar(256)
+  loweredrolename  String               @db.VarChar(256)
+  description      String?              @db.VarChar(256)
+  usersinroles     AspnetUsersinroles[]
+
+  @@map("aspnet_roles")
+}
+
+model AspnetUsersinroles {
+  userid  String      @db.Uuid
+  roleid  String      @db.Uuid
+  user    AspnetUsers @relation(fields: [userid], references: [userid])
+  role    AspnetRoles @relation(fields: [roleid], references: [roleid])
+
+  @@id([userid, roleid])
+  @@map("aspnet_usersinroles")
+}
+
+model TablaCasos {
+  id_numero_caso          Int       @id @default(autoincrement())
+  id_tipocaso             Int?
+  id_estado               Int?
+  id_analista             Int?
+  id_investigador         Int?
+  fecha_asignacion        String?   @db.VarChar
+  fecha_posibleentrega    String?   @db.VarChar
+  fecha_entregareal       String?   @db.VarChar
+  observaciones           String?
+  ciudad                  Int?
+  b_claborales_pendientes Boolean?
+
+  tipodecaso    TablaTipodecaso?   @relation(fields: [id_tipocaso], references: [id_tipocaso])
+  estado        TablaEstado?       @relation(fields: [id_estado], references: [id_estado])
+  analista      TablaAnalista?     @relation(fields: [id_analista], references: [id_analista])
+  investigador  TablaInvestigador? @relation(fields: [id_investigador], references: [id_investigador])
+  afiliados     TablaAfiliado[]
+  informes      TablaInformes[]
+  facturas      TblFacturas[]
+
+  @@map("tabla_casos")
+}
+
+model TablaAfiliado {
+  id_afiliado    Int     @id @default(autoincrement())
+  id_laborales   Int?
+  id_numero_caso Int?
+  apellido       String?
+  barrio         String?
+  cedula         BigInt?
+  celular        BigInt?
+  ciudad         Int?
+  direccion      String? @db.VarChar
+  nombre         String?
+  telefono       Int?
+
+  caso         TablaCasos?         @relation(fields: [id_numero_caso], references: [id_numero_caso])
+  seguimientos TablaSeguimientos[]
+
+  @@map("tabla_afiliado")
+}
+
+model TablaAnalista {
+  id_analista  Int     @id @default(autoincrement())
+  id_usuario   Int?
+  id_oficina   Int?
+  celular      BigInt?
+  extencion    Int?
+  nombres      String?
+  apellidos    String?
+  telefono     BigInt?
+  correo       String?
+  id_usernuevo String? @db.Uuid
+
+  casos   TablaCasos[]
+  oficina TablaOficina? @relation(fields: [id_oficina], references: [id_oficina])
+
+  @@map("tabla_analista")
+}
+
+model TablaInvestigador {
+  id_investigador Int     @id @default(autoincrement())
+  id_usuario      Int?
+  barrio          String? @db.VarChar
+  cedula          BigInt?
+  celular         BigInt?
+  ubicacion       Int?
+  apellidos       String?
+  nombres         String?
+  direccion       String?
+  telefono_fijo   BigInt?
+  correo          String?
+  id_usernuevo    String? @db.Uuid
+  activo          Boolean?
+
+  casos TablaCasos[]
+
+  @@map("tabla_investigador")
+}
+
+model TablaInformes {
+  id_informe        Int     @id @default(autoincrement())
+  id_tipoinforme    Int?
+  id_numero_de_caso Int?
+  ruta_pdf          String?
+  ruta_word         String?
+  id_estadodocus    Int?
+
+  caso         TablaCasos?         @relation(fields: [id_numero_de_caso], references: [id_numero_caso])
+  tipoinforme  TablaTipodeinforme? @relation(fields: [id_tipoinforme], references: [id_tipoinforme])
+  estadodocus  TablaEstadodocus?   @relation(fields: [id_estadodocus], references: [id_estadodocus])
+
+  @@map("tabla_informes")
+}
+
+model TablaTipodecaso {
+  id_tipocaso  Int     @id @default(autoincrement())
+  nombre       String? @db.VarChar
+  id_clasecaso Int?
+
+  casos        TablaCasos[]
+  clasedecaso  TablaClasedecaso? @relation(fields: [id_clasecaso], references: [id_clasecaso])
+
+  @@map("tabla_tipodecaso")
+}
+
+model TablaClasedecaso {
+  id_clasecaso Int     @id @default(autoincrement())
+  nombre       String? @db.VarChar
+
+  tipodecasos TablaTipodecaso[]
+
+  @@map("tabla_clasedecaso")
+}
+
+model TablaEstado {
+  id_estado Int     @id @default(autoincrement())
+  nombre    String?
+
+  casos TablaCasos[]
+
+  @@map("tabla_estado")
+}
+
+model TablaEstadodocus {
+  id_estadodocus Int     @id @default(autoincrement())
+  nombre         String?
+
+  informes TablaInformes[]
+
+  @@map("tabla_estadodocus")
+}
+
+model TablaTipodeinforme {
+  id_tipoinforme Int     @id @default(autoincrement())
+  nombre         String?
+
+  informes TablaInformes[]
+
+  @@map("tabla_tipodeinforme")
+}
+
+model TablaCiudades {
+  id_ciudad    Int     @id @default(autoincrement())
+  ciudad       String?
+  departamento Int?
+
+  dept TablaDepartamentos? @relation(fields: [departamento], references: [id_departamento])
+
+  @@map("tabla_ciudades")
+}
+
+model TablaDepartamentos {
+  id_departamento Int     @id @default(autoincrement())
+  nombre          String?
+
+  ciudades TablaCiudades[]
+
+  @@map("tabla_departamentos")
+}
+
+model TablaCompania {
+  id_compania Int     @id @default(autoincrement())
+  nombre      String?
+
+  oficinas TablaOficina[]
+
+  @@map("tabla_compania")
+}
+
+model TablaOficina {
+  id_oficina  Int     @id @default(autoincrement())
+  id_compania Int?
+  direccion   String?
+  telefono    BigInt?
+  ubicacion   Int?
+
+  compania  TablaCompania?  @relation(fields: [id_compania], references: [id_compania])
+  analistas TablaAnalista[]
+
+  @@map("tabla_oficina")
+}
+
+model TablaSeguimientos {
+  id_seguimientos Int     @id @default(autoincrement())
+  id_afiliado     Int?
+  celular         BigInt?
+  ciudad          Int?
+  direccion       String?
+  entidad         String?
+  extencion       Int?
+  fecha           String?
+  hora            String?
+  nombre_contacto String?
+  telefono        Int?
+
+  afiliado TablaAfiliado? @relation(fields: [id_afiliado], references: [id_afiliado])
+
+  @@map("tabla_seguimientos")
+}
+
+model TblFacturas {
+  n_id_factura                       Int       @id @default(autoincrement())
+  t_fecha                            DateTime? @db.Timestamp(6)
+  b_finalizada                       Boolean?
+  n_facturafisica                    BigInt?
+  n_valor_servicio_de_investigacion  BigInt?
+  n_valor_gastos_de_investigacion    BigInt?
+  n_valor_subtotal                   BigInt?
+  n_valor_iva                        BigInt?
+  n_valor_total_a_pagar              BigInt?
+  fk_numero_de_caso                  Int?
+  id_factura_multiple                BigInt?
+  esfactura_multiple                 Boolean?
+  facturafisica_servicio             BigInt?
+  facturafisica_gasto                BigInt?
+  facturafisica_gasto_fijo           BigInt?
+  n_valor_gastos_fijos_investigacion BigInt?
+
+  caso TablaCasos? @relation(fields: [fk_numero_de_caso], references: [id_numero_caso])
+
+  @@map("tbl_facturas")
+}
+
+model TblCuentas {
+  id_cuentas      BigInt  @id @default(autoincrement())
+  t_nombre        String? @db.VarChar
+  id_investigador BigInt?
+
+  @@map("tbl_cuentas")
+}
+
+model TblTransacciones {
+  id_transaccion    BigInt    @id @default(autoincrement())
+  id_cuenta_origen  BigInt?
+  id_cuenta_destino BigInt?
+  n_valor           BigInt?
+  t_fecha           DateTime? @db.Timestamp(6)
+  id_metodo         BigInt?
+
+  @@map("tbl_transacciones")
+}
+
+model TblGastos {
+  id_gasto    BigInt    @id @default(autoincrement())
+  id_factura  BigInt?
+  descripcion String?
+  valor       BigInt?
+  fecha       DateTime? @db.Timestamp(6)
+
+  @@map("tbl_gastos")
+}
