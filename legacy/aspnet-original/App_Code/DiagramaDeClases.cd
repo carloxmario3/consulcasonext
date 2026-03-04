@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ClaseCompania">
+    <Position X="26.5" Y="18" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseCompania.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseCompania.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseCompania.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseCompania.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAAAAAAAAAAAgBAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\ClaseCompania.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseOficina">
+    <Position X="24.5" Y="18" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseOficina.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseOficina.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseOficina.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseOficina.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAAAAAAAACAAAJAAAAAAAAABAAAAAgAAAAA=</HashCode>
+      <FileName>App_Code\ClaseOficina.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseAnalista">
+    <Position X="21.25" Y="15.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseAnalista.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseAnalista.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseAnalista.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseAnalista.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQAACgAAAAAAAIAEAEAAAQAAAIAAAQABAAAAAggAAAA=</HashCode>
+      <FileName>App_Code\ClaseAnalista.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseCiudad">
+    <Position X="24.25" Y="22.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseCiudad.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseCiudad.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseCiudad.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseCiudad.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAAAAAAEAAAAAQgAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\ClaseCiudad.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseInvestigador">
+    <Position X="21" Y="20" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseInvestigador.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseInvestigador.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseInvestigador.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseInvestigador.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQAACgAAAAAAAIIEAGAAAIAEAIAAAAABAAAAAAiAAAA=</HashCode>
+      <FileName>App_Code\ClaseInvestigador.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseUsuario">
+    <Position X="26.5" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>App_Code\ClaseUsuario.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseCasos">
+    <Position X="18" Y="20" Width="1.75" />
+    <NestedTypes>
+      <Delegate Name="ClaseCasos.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseCasos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseCasos.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseCasos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAADggAAAABAgABCAAAAQQEAAAAAAADAIAkAEAEAAA=</HashCode>
+      <FileName>App_Code\ClaseCasos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseAfiliado">
+    <Position X="15.5" Y="21.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseAfiliado.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseAfiliado.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseAfiliado.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseAfiliado.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAAAAAKECCAAgAgEAAAAAAABAAAAAggAQAA=</HashCode>
+      <FileName>App_Code\ClaseAfiliado.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseMuerte">
+    <Position X="12.25" Y="23.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseMuerte.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseMuerte.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseMuerte.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseMuerte.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAEAAAAAAEAAAAAAAAAAEAAQABBAAAAAAAAQCA=</HashCode>
+      <FileName>App_Code\ClaseMuerte.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseLaborales">
+    <Position X="12.25" Y="17.75" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseLaborales.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseLaborales.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseLaborales.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseLaborales.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACghAgAAAAAAIACAAAAgEAAAgAQABAAAAAggCQAA=</HashCode>
+      <FileName>App_Code\ClaseLaborales.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseReclamantes">
+    <Position X="15.5" Y="16" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseReclamantes.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseReclamantes.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseReclamantes.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseReclamantes.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgBAgAAAAAIECCABgAgEAAAAAAABAAAAAggAQAA=</HashCode>
+      <FileName>App_Code\ClaseReclamantes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseSeguimientos">
+    <Position X="15.5" Y="11.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseSeguimientos.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseSeguimientos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseSeguimientos.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseSeguimientos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BAEACgAAAAAAAAEAACAAAAgAAEAAAQABQAAAAggAQAA=</HashCode>
+      <FileName>App_Code\ClaseSeguimientos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseResumenes">
+    <Position X="17.75" Y="13.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseResumenes.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseResumenes.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseResumenes.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseResumenes.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgACggAAAAAAAEAQAAAAAIAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\ClaseResumenes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseRecuinve">
+    <Position X="15.25" Y="7" Width="2" />
+    <NestedTypes>
+      <Delegate Name="ClaseRecuinve.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseRecuinve.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseRecuinve.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseRecuinve.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAQAAAAAQAAAAAAAABAAAAABAACAABAAAAA=</HashCode>
+      <FileName>App_Code\ClaseRecuinve.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseAnexos">
+    <Position X="21.25" Y="11.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseAnexos.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseAnexos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseAnexos.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseAnexos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgACgEIAAQAAAAAAAAAAAAAABAAAAABAACAAAAAAAA=</HashCode>
+      <FileName>App_Code\ClaseAnexos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseInformes">
+    <Position X="24" Y="11.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseInformes.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseInformes.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseInformes.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseInformes.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgECgEAAAAAAAAAQgAAAAAEABAAAAABAAAIAAAAAAA=</HashCode>
+      <FileName>App_Code\ClaseInformes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseVideo">
+    <Position X="21.25" Y="7.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseVideo.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseVideo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseVideo.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseVideo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgACgEAAAQAAAAAAAAAAAAAABAAAABBAACAAAAAAAA=</HashCode>
+      <FileName>App_Code\ClaseVideo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClaseFotos">
+    <Position X="23.75" Y="7.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClaseFotos.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseFotos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClaseFotos.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClaseFotos.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgACgEAAQQAAAAAAAAAAAAAABAAAAABAACAAAAEAAA=</HashCode>
+      <FileName>App_Code\ClaseFotos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClasePublicados">
+    <Position X="18.25" Y="7" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="ClasePublicados.Ejecutado_con_exitoEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClasePublicados.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ClasePublicados.Error_en_operacionEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>App_Code\ClasePublicados.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAQAAAAAQAAAAAIAABAAAAABAACAAAAAAAA=</HashCode>
+      <FileName>App_Code\ClasePublicados.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

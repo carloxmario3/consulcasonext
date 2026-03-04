@@ -1,0 +1,108 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="ConsulCaso9_MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    
+    <title>ContaCaso</title>
+	<link rel="stylesheet" href="../ConsulCaso9/estilos.css">
+	<link rel="stylesheet" href="http://i.icomoon.io/public/temp/7d96e2500b/UntitledProject7/style.css">
+	<link rel="stylesheet" href="../ConsulCaso9/fonts.css">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    
+    
+    <script src="/ConsulCaso9//jquery-latest.js"></script>
+	
+      <%--
+    
+    <script src="/ConsulCaso9/menu.js"></script>
+
+      --%>
+    
+    
+    <asp:ContentPlaceHolder id="head" runat="server">
+
+    
+
+
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+
+        
+        
+           <header>
+		<asp:Label ID="Label1" runat="server" Font-Bold="True" Text="Label"></asp:Label>
+               <%--
+               <div class="menu_bar">
+			<a class="bt-menu" href="#"><img style='width: 250px' src="/ConsulCaso9/0.jpg"/></a>
+		</div>
+
+
+ 
+		<nav>
+			<ul>
+				
+                <asp:Panel ID="Panel2" runat="server"></asp:Panel>
+
+
+                <li><a href='/ContaCaso/Facturacion/FacturacionCasoMultipleColfodos.aspx'><img src='/ConsulCaso9/file-text.png'/>   Facturacion Colfondos</a></li><li><a href='/ContaCaso/Facturacion/TarifasInvestigacion.aspx'><img src='/ConsulCaso9/file-text.png'/>   Tarifas Investigacion</a></li><li><a href='/ContaCaso/ConsignacionViaticos.aspx'><img src='/ConsulCaso9/file-text.png'/>   Consignacion Investigadores</a></li><li><a href='/ConsulCaso9/PanelDeControlSimple.aspx'><img src='/ConsulCaso9/file-text.png'/>   Lista De Casos</a></li><li><a href='/ConsulCaso9/VerTodosLosCasos.aspx'><img src='/ConsulCaso9/file-text.png'/>   Buscar Casos</a></li><li><a href='/ListaDeCasosPage.aspx'><img src='/ConsulCaso9/file-text.png'/>   Lista De Casos Antigua</a></li><li><a href='/nuevocaso/1'><img src='/ConsulCaso9/file-text.png'/>   Nuevos Casos</a></li><li><a href='/Gestion/AsignarCasosPage.aspx'><img src='/ConsulCaso9/file-text.png'/>   Asignar Casos</a></li><li><a href='/Gestion/EstadoPage.aspx'><img src='/ConsulCaso9/file-text.png'/>   Cambiar Estado Casos</a></li><li><a href='/ListaDeInformes/Revisar'><img src='/ConsulCaso9/file-text.png'/>   Revisar Informes</a></li><li><a href='/ListaDeInformes/Publicados'><img src='/ConsulCaso9/file-text.png'/>   Informes Publicados</a></li><li><a href='/Administracion/ClientesPage.aspx'><img src='/ConsulCaso9/file-text.png'/>   Administrar Clientes</a></li><li><a href='/Administracion/InvestigadoresPage.aspx'><img src='/ConsulCaso9/file-text.png'/>   Administrar Investigadores</a></li><li><a href='/Administracion/DepartamentosPage.aspx'><img src='/ConsulCaso9/file-text.png'/>   Administrar Ciudades</a></li><li><a href='/ContaCaso/EditarConceptos.aspx'><img src='/ConsulCaso9/file-text.png'/>   Administrar Conceptos</a></li><li><a href='/ContaCaso/RecivoCajaMenor.aspx'><img src='/ConsulCaso9/file-text.png'/>   Regreso A Caja Menor</a></li><li><a href='/Contacaso/Consignaciones.aspx'><img src='/ConsulCaso9/file-text.png'/>   Saldos Investigadores</a></li><li><a href='/ContaCaso/imprimir/ReporteLegalizacionesMes.aspx'><img src='/ConsulCaso9/file-text.png'/>   Reporte Legalizacion</a></li><li><a href='/ContaCaso/RecivoCajaMenor.aspx'><img src='/ConsulCaso9/file-text.png'/>   Regreso A Caja Menor</a></li><li><a href='/ConsulCaso9/LogOut.aspx'><img src='/ConsulCaso9/file-text.png'/>   Cerrar Sesion</a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+				
+                
+			</ul>
+		</nav>
+	--%>
+        
+        </header>
+
+          
+	
+        <br />
+        <br />
+
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+        
+          <%--
+        
+        	<nav>
+			<ul>
+				
+                <asp:Panel ID="Panel1" runat="server"></asp:Panel>
+
+
+                
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+
+                <li><a href="#"><img src="/ConsulCaso9/Blanco.png"/></a></li>
+				
+                
+			</ul>
+		</nav>
+	
+              --%>
+
+    </div>
+    </form>
+</body>
+</html>

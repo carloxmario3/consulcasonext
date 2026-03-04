@@ -9,3 +9,6 @@ npm-debug.log*
 Dockerfile
 .dockerignore
 README.md
+CLAUDE.md
+AGENTS.md
+legacy

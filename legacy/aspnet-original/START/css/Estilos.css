@@ -1,0 +1,189 @@
+﻿body
+{
+    text-align: center;
+    margin: 0px;
+    background-image: url('../img/Transparente.png');
+    background-repeat: repeat;
+    font-family: 'Eras Medium ITC';
+    
+    
+}
+
+h1
+{
+    text-align: center;
+    color: #000080;
+    
+}
+
+header
+{
+    
+    
+    
+    }
+    
+    
+    .probandocondiv
+{
+    text-align: justify;
+    margin: auto;
+    width: 70%;
+    height: 100%;
+    position: relative;
+    background-color: #FFFFFF;
+     
+     
+     border-radius: 25px 25px 25px 25px;
+     padding:10px;
+     
+     box-shadow: 0px 0px 30px #003399;
+   -moz-box-shadow: 0px 0px 30px #003399;
+   -webkit-box-shadow: 0px 0px 30px #003399;
+   -o-box-shadow:  0px 0px 30px #003399;
+   
+   behavior: url(pie/PIE.htc);
+   
+    
+}
+   
+   
+   
+    
+   
+    
+    
+    
+  article
+{
+    text-align: justify;
+    margin: auto;
+    width: 70%;
+    height: 100%;
+    position: relative;
+    background-color: #FFFFFF;
+     
+     
+     border-radius: 25px 25px 25px 25px;
+     padding:10px;
+     
+     box-shadow: 0px 0px 30px #003399;
+   -moz-box-shadow: 0px 0px 30px #003399;
+   -webkit-box-shadow: 0px 0px 30px #003399;
+   -o-box-shadow:  0px 0px 30px #003399;
+   behavior: url(pie/PIE.htc);
+          
+}
+    
+    
+    
+     #principal
+{
+    margin: auto;
+    width: 60%;
+    height: 100%;
+    position: relative;
+    box-shadow: 0px 0px 30px black;
+    -moz-box-shadow: 0px 0px 30px black;
+    -webkit-box-shadow: 0px 0px 30px black;
+    -o-box-shadow: 0px 0px 30px black;
+    border-radius: 25px 25px 25px 25px;
+    background-color: #FFFFFF;
+    behavior: url(pie/PIE.htc);
+    
+}
+    
+    
+  
+    
+    
+    
+    
+   
+
+footer
+{
+    
+ 
+    
+}
+ 
+/*Menu de navegacion*/
+
+nav{
+display:inline; 
+
+}
+
+nav ul{
+
+
+display:inline;
+}
+
+nav ul li{
+display: inline;
+text-align:center;
+
+
+}
+
+a
+{
+   border: none;  
+   
+}
+
+.imagenes
+{
+       border-style: none;
+    border-color: inherit;
+    border-width: medium;
+    position: relative;
+         
+    box-shadow: 0px 0px 30px Yellow;
+    -moz-box-shadow: 0px 0px 30px Yellow;
+    -webkit-box-shadow: 0px 0px 30px Yellow;
+    -o-box-shadow:  px 0px 30px Yellow;
+   
+    behavior: url(pie/PIE.htc);
+    top: -3px;
+    left: -2px;
+}
+    
+    #Image1
+{
+         
+         
+    
+     box-shadow: 0px 0px 30px Yellow;
+   -moz-box-shadow: 0px 0px 30px Yellow;
+   -webkit-box-shadow: 0px 0px 30px Yellow;
+   -o-box-shadow:  px 0px 30px Yellow;
+   
+   behavior: url(pie/PIE.htc);
+  
+}
+    
+    
+    #probandocondiv2
+{
+   
+    
+    
+    position: relative;
+    
+               
+     
+     box-shadow: 0px 0px 30px Yellow;
+   -moz-box-shadow: 0px 0px 30px Yellow;
+   -webkit-box-shadow: 0px 0px 30px Yellow;
+   -o-box-shadow:  0px 0px 30px Yellow;
+   behavior: url(pie/PIE.htc);
+   
+   /*text-shadow:1px 1px 5px #003399;*/
+    
+}
+
+    
+

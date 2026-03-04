@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://localhost/miwebservice" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://localhost/miwebservice" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">servicioContacaso</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/miwebservice">
+      <s:element name="NuevaLegalizacion">
+        <s:complexType />
+      </s:element>
+      <s:element name="NuevaLegalizacionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NuevaLegalizacionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CargarInvestigadores">
+        <s:complexType />
+      </s:element>
+      <s:element name="CargarInvestigadoresResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CargarInvestigadoresResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="NuevaLegalizacionSoapIn">
+    <wsdl:part name="parameters" element="tns:NuevaLegalizacion" />
+  </wsdl:message>
+  <wsdl:message name="NuevaLegalizacionSoapOut">
+    <wsdl:part name="parameters" element="tns:NuevaLegalizacionResponse" />
+  </wsdl:message>
+  <wsdl:message name="CargarInvestigadoresSoapIn">
+    <wsdl:part name="parameters" element="tns:CargarInvestigadores" />
+  </wsdl:message>
+  <wsdl:message name="CargarInvestigadoresSoapOut">
+    <wsdl:part name="parameters" element="tns:CargarInvestigadoresResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ContaCasoServiceSoap">
+    <wsdl:operation name="NuevaLegalizacion">
+      <wsdl:input message="tns:NuevaLegalizacionSoapIn" />
+      <wsdl:output message="tns:NuevaLegalizacionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CargarInvestigadores">
+      <wsdl:input message="tns:CargarInvestigadoresSoapIn" />
+      <wsdl:output message="tns:CargarInvestigadoresSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContaCasoServiceSoap" type="tns:ContaCasoServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="NuevaLegalizacion">
+      <soap:operation soapAction="http://localhost/miwebservice/NuevaLegalizacion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CargarInvestigadores">
+      <soap:operation soapAction="http://localhost/miwebservice/CargarInvestigadores" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ContaCasoServiceSoap12" type="tns:ContaCasoServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="NuevaLegalizacion">
+      <soap12:operation soapAction="http://localhost/miwebservice/NuevaLegalizacion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CargarInvestigadores">
+      <soap12:operation soapAction="http://localhost/miwebservice/CargarInvestigadores" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContaCasoService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">servicioContacaso</wsdl:documentation>
+    <wsdl:port name="ContaCasoServiceSoap" binding="tns:ContaCasoServiceSoap">
+      <soap:address location="http://localhost:52039/Service1.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ContaCasoServiceSoap12" binding="tns:ContaCasoServiceSoap12">
+      <soap12:address location="http://localhost:52039/Service1.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

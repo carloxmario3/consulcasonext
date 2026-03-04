@@ -1,0 +1,351 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+
+
+    
+     
+<meta name="application-name" content="Consultando 8"/> 
+<meta name="msapplication-tooltip" content="Consultando 8"/> 
+ <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+
+
+
+<META name="msapplication-task" content="name=Revisar Informes;action-uri=http://consulcaso.consultandoltda.com/ListaDeInformes/Revisar;icon-uri=http://consultandoweb.com/favicon_azul.ico"/>
+<META name="msapplication-task" content="name=Lista De Casos Activos;action-uri=http://consulcaso.consultandoltda.com/ListaDeCasosPage.aspx;icon-uri=http://consultandoweb.com/favicon_morado.ico"/>
+<META name="msapplication-task" content="name=Bitacora De Casos;action-uri=http://consulcaso.consultandoltda.com/Resumenes/Revisar;icon-uri=http://consultandoweb.com/favicon_rojo.ico"/>
+<META name="msapplication-task" content="name=Nuevo Caso;action-uri=http://consulcaso.consultandoltda.com/nuevocaso/1;icon-uri=http://consultandoweb.com/Favicon_verde.ico"/>
+    
+    
+    <meta name="msapplication-navbutton-color" content="#FFCC00"/>
+
+
+
+
+
+    <LINK rel="shortcut icon" type=image/x-icon href="http://consultandoweb.com/FaviconWeb.ico">
+    <LINK rel=icon type=image/ico href="http://consultandoweb.com/FaviconWeb.ico">
+
+
+
+
+    <link href="~/Estilos/consulstyle.css" rel="stylesheet" type="text/css" />
+
+    
+  
+
+
+    <asp:ContentPlaceHolder id="head" runat="server">
+    
+   
+	
+    
+    </asp:ContentPlaceHolder>
+
+
+
+</head>
+<body>
+    <form id="form1" runat="server">
+    
+    
+   
+  
+    
+   
+
+
+    <div class="clear hideSkiplink" align="center"  >
+    
+      
+   
+          
+           <table border="1" bgcolor="#FFCC00" >
+                        <tr>
+                            <td>
+    
+    
+    
+   
+       <asp:Menu ID="MenuInvestigadores" runat="server" CssClass="menu" 
+            EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal" 
+            Visible="False">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/ListaDeCasosPage.aspx" Text="1. Casos" 
+                            Value="1. Casos"/>
+                        <asp:MenuItem Text="2. Gestión de Informes" Value="2. Gestión de Informes">
+                            <asp:MenuItem Text="2.1 Corregir Informes " Value="2.1 Corregir Informes" 
+                                NavigateUrl="~/ListaDeInformes/Corregir">
+                            </asp:MenuItem>
+                        </asp:MenuItem>
+                    </Items>
+                </asp:Menu>
+
+                <asp:Menu ID="MenuAreaOperativa" runat="server" CssClass="menu" 
+            EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal" 
+            Visible="False">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/ListaDeCasosPage.aspx" Text="1. Casos" 
+                            Value="1. Casos"/>
+                        <asp:MenuItem Text="2. Nuevo Caso" Value="2. Nuevo Caso" 
+                            NavigateUrl="~/nuevocaso/1">
+                            <asp:MenuItem Text="2.1 Dependencia" Value="2.1 Dependencia" 
+                                NavigateUrl="~/nuevocaso/1">
+                                <asp:MenuItem Text="2.1.1 Padres" Value="2.1.1 Padres" 
+                                    NavigateUrl="~/nuevocaso/1"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.2 Convivencia" Value="2.2 Convivencia" 
+                                NavigateUrl="~/nuevocaso/2">
+                                <asp:MenuItem Text="2.2.1 Compañera" Value="2.2.1 Compañera" 
+                                    NavigateUrl="~/nuevocaso/2"></asp:MenuItem>
+                                <asp:MenuItem Text="2.2.2 Conyuge" Value="2.2.2 Conyuge" 
+                                    NavigateUrl="~/nuevocaso/3"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.3 Origen" Value="2.3 Origen" NavigateUrl="~/nuevocaso/4">
+                                <asp:MenuItem Text="2.3.1 Arp" Value="2.3.1 Arp" NavigateUrl="~/nuevocaso/4"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.4 Seguimiento" Value="2.4 Seguimiento" 
+                                NavigateUrl="~/nuevocaso/5"></asp:MenuItem>
+                        </asp:MenuItem>
+                        <asp:MenuItem Text="3. Gestión de Casos" Value="3. Gestión de Casos">
+                            <asp:MenuItem NavigateUrl="~/Gestion/AsignarCasosPage.aspx" 
+                                Text="3.1 Asignar Casos" Value="3.1 Asignar Casos"></asp:MenuItem>
+                            <asp:MenuItem Text="3.2 Cambiar Estado" Value="3.2 Cambiar Estado" 
+                                NavigateUrl="~/Gestion/EstadoPage.aspx">
+                            </asp:MenuItem>
+                        </asp:MenuItem>
+<asp:MenuItem Text="4. Gestión de Informes" Value="4. Gestión de Informes">
+    <asp:MenuItem NavigateUrl="~/ListaDeInformes/Revisar" 
+        Text="4.1 Revisar Informes" Value="4.1 Revisar Informes"></asp:MenuItem>
+<asp:MenuItem NavigateUrl="~/ListaDeInformes/Publicados" Text="4.2 Informes Publicados" 
+        Value="4.3 Informes Publicados"></asp:MenuItem>
+</asp:MenuItem>
+                        <asp:MenuItem Text="5. Bitacora De Casos" Value="5. Gestión de Resumenes" 
+                            NavigateUrl="~/Resumenes/Revisar">
+                        </asp:MenuItem>
+                        <asp:MenuItem Text="6. Administración" Value="6. Administración">
+                            <asp:MenuItem Text="6.1 Clientes" Value="6.1 Clientes" 
+                                NavigateUrl="~/Administracion/ClientesPage.aspx"></asp:MenuItem>
+                            <asp:MenuItem Text="6.2 Investigadores" Value="6.2 Investigadores" 
+                                NavigateUrl="~/Administracion/InvestigadoresPage.aspx">
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="6.3 Ciudades y Departamentos" 
+                                Value="6.3 Ciudades y Departamentos" 
+                                NavigateUrl="~/Administracion/DepartamentosPage.aspx"></asp:MenuItem>
+                        </asp:MenuItem>
+                    </Items>
+                </asp:Menu>
+
+
+                <asp:Menu ID="MenuAnalistas" runat="server" CssClass="menu" 
+            EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal" 
+            Visible="False">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/ListaDeCasosPage.aspx" Text="1. Casos" 
+                            Value="1. Casos"/>
+                       
+                       <asp:MenuItem Text="2. Nuevo Caso" Value="2. Nuevo Caso" 
+                            NavigateUrl="~/nuevocaso/1">
+                            <asp:MenuItem Text="2.1 Dependencia" Value="2.1 Dependencia" 
+                                NavigateUrl="~/nuevocaso/1">
+                                <asp:MenuItem Text="2.1.1 Padres" Value="2.1.1 Padres" 
+                                    NavigateUrl="~/nuevocaso/1"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.2 Convivencia" Value="2.2 Convivencia" 
+                                NavigateUrl="~/nuevocaso/2">
+                                <asp:MenuItem Text="2.2.1 Compañera" Value="2.2.1 Compañera" 
+                                    NavigateUrl="~/nuevocaso/2"></asp:MenuItem>
+                                <asp:MenuItem Text="2.2.2 Conyuge" Value="2.2.2 Conyuge" 
+                                    NavigateUrl="~/nuevocaso/3"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.3 Origen" Value="2.3 Origen" NavigateUrl="~/nuevocaso/4">
+                                <asp:MenuItem Text="2.3.1 Arp" Value="2.3.1 Arp" NavigateUrl="~/nuevocaso/4"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.4 Seguimiento" Value="2.4 Seguimiento" 
+                                NavigateUrl="~/nuevocaso/5"></asp:MenuItem>
+                        </asp:MenuItem>
+
+
+                    </Items>
+                </asp:Menu>
+
+
+                <asp:Menu ID="MenuJefeAnalistas" runat="server" CssClass="menu" 
+            EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal" 
+            Visible="False">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/ListaDeCasosPage.aspx" Text="1. Casos" 
+                            Value="1. Casos"/>
+                        
+                        <asp:MenuItem Text="2. Nuevo Caso" Value="2. Nuevo Caso" 
+                            NavigateUrl="~/nuevocaso/1">
+                            <asp:MenuItem Text="2.1 Dependencia" Value="2.1 Dependencia" 
+                                NavigateUrl="~/nuevocaso/1">
+                                <asp:MenuItem Text="2.1.1 Padres" Value="2.1.1 Padres" 
+                                    NavigateUrl="~/nuevocaso/1"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.2 Convivencia" Value="2.2 Convivencia" 
+                                NavigateUrl="~/nuevocaso/2">
+                                <asp:MenuItem Text="2.2.1 Compañera" Value="2.2.1 Compañera" 
+                                    NavigateUrl="~/nuevocaso/2"></asp:MenuItem>
+                                <asp:MenuItem Text="2.2.2 Conyuge" Value="2.2.2 Conyuge" 
+                                    NavigateUrl="~/nuevocaso/3"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.3 Origen" Value="2.3 Origen" NavigateUrl="~/nuevocaso/4">
+                                <asp:MenuItem Text="2.3.1 Arp" Value="2.3.1 Arp" NavigateUrl="~/nuevocaso/4"></asp:MenuItem>
+                            </asp:MenuItem>
+                            <asp:MenuItem Text="2.4 Seguimiento" Value="2.4 Seguimiento" 
+                                NavigateUrl="~/nuevocaso/5"></asp:MenuItem>
+                        </asp:MenuItem>
+
+
+                    </Items>
+                </asp:Menu>
+
+    
+       
+         
+          
+                <asp:Menu ID="MenuCasos" runat="server" CssClass="menu" 
+            EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
+                </asp:Menu>
+
+    
+                            </td>
+                        </tr>
+                    </table>
+
+    
+         
+
+       
+
+           
+
+       
+    
+
+           
+           
+      
+
+           
+    
+       
+
+       
+    
+   
+
+       
+
+           
+        
+       
+    
+     
+                        
+
+           
+           
+      
+
+           
+    
+       
+
+       
+    
+    </div>
+    
+
+    <div class="clear hideSkiplink" align="center"  >
+
+
+    <table border="1" >
+                        <tr>
+                            <td>
+    
+     <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+         
+    
+        <br />
+
+
+        <asp:Button ID="Button2" runat="server" Text="Menu Principal" 
+            onclick="Button2_Click" />
+                        
+
+           
+           
+      
+
+           
+    
+       
+
+       
+    
+                            </td>
+                            <td>
+                <asp:Image ID="Image1" runat="server" ImageUrl="~/imagenes/logo.png" 
+            Height="78px" Width="215px" />
+
+                            </td>
+                            <td>
+
+       
+
+           
+                                <br />
+
+       
+
+           
+        <asp:Button ID="Button1" runat="server" Text="Cerrar sesión" 
+            onclick="Button1_Click" />
+
+           
+    
+       
+
+       
+    
+     
+                        
+
+           
+           
+      
+
+           
+    
+       
+
+       
+    
+                            </td>
+                        </tr>
+</table>
+
+</div>
+   
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+           
+        
+        </asp:ContentPlaceHolder>
+   
+
+
+    
+
+
+    </form>
+</body>
+</html>
