@@ -59,7 +59,7 @@ export function ContabilidadClient() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
             { label: "Total Facturado", value: formatCOP(stats.totalFacturado), color: "text-green-700" },
-            { label: "Subtotal", value: formatCOP(stats.totalSubtotal), color: "text-blue-700" },
+            { label: "Subtotal", value: formatCOP(stats.totalSubtotal), color: "text-brand-dark" },
             { label: "IVA Total", value: formatCOP(stats.totalIva), color: "text-purple-700" },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-xl border border-gray-200 p-5">
@@ -102,7 +102,7 @@ export function ContabilidadClient() {
                       <span className="text-gray-400">—</span>
                     )}
                     {f.esfactura_multiple && (
-                      <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">Múltiple</span>
+                      <span className="ml-2 text-xs bg-blue-100 text-brand-dark px-1.5 py-0.5 rounded">Múltiple</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-gray-600">

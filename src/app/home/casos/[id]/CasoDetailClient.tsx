@@ -164,7 +164,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`px-5 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                 activeTab === tab.id
-                  ? "text-blue-600 border-b-2 border-blue-600"
+                  ? "text-brand border-b-2 border-brand"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -181,7 +181,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                     <select value={form.id_estado} onChange={e => setForm(f => ({ ...f, id_estado: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand">
                       {estados.map((e: { id_estado: number; nombre: string }) => (
                         <option key={e.id_estado} value={e.id_estado}>{e.nombre}</option>
                       ))}
@@ -190,7 +190,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Analista</label>
                     <select value={form.id_analista} onChange={e => setForm(f => ({ ...f, id_analista: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand">
                       <option value="">Sin asignar</option>
                       {analistas.map((a: { id_analista: number; nombres: string; apellidos: string }) => (
                         <option key={a.id_analista} value={a.id_analista}>{`${a.nombres ?? ""} ${a.apellidos ?? ""}`.trim()}</option>
@@ -200,7 +200,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Investigador</label>
                     <select value={form.id_investigador} onChange={e => setForm(f => ({ ...f, id_investigador: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand">
                       <option value="">Sin asignar</option>
                       {investigadores.map((i: { id_investigador: number; nombres: string; apellidos: string }) => (
                         <option key={i.id_investigador} value={i.id_investigador}>{`${i.nombres ?? ""} ${i.apellidos ?? ""}`.trim()}</option>
@@ -210,26 +210,26 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">F. Asignación</label>
                     <input type="date" value={form.fecha_asignacion} onChange={e => setForm(f => ({ ...f, fecha_asignacion: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">F. Posible Entrega</label>
                     <input type="date" value={form.fecha_posibleentrega} onChange={e => setForm(f => ({ ...f, fecha_posibleentrega: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">F. Entrega Real</label>
                     <input type="date" value={form.fecha_entregareal} onChange={e => setForm(f => ({ ...f, fecha_entregareal: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
                     <textarea value={form.observaciones} onChange={e => setForm(f => ({ ...f, observaciones: e.target.value }))}
-                      rows={4} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
+                      rows={4} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand resize-none" />
                   </div>
                   <div className="md:col-span-2 flex justify-end gap-3">
                     <button onClick={() => setEditing(false)} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
-                    <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+                    <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm bg-brand hover:bg-brand-dark disabled:opacity-60 text-white rounded-lg">
                       {saving ? "Guardando..." : "Guardar cambios"}
                     </button>
                   </div>
@@ -272,7 +272,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
               <div className="flex justify-end">
                 <button
                   onClick={() => setShowNuevoArchivo(true)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm bg-brand hover:bg-brand-dark text-white rounded-lg font-medium"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -309,7 +309,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                                     href={`https://drive.google.com/file/d/${archivo.t_enlace}/view?usp=sharing`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-xs text-blue-600 hover:text-blue-800 border border-blue-200 hover:border-blue-400 px-2 py-1 rounded-md transition-colors"
+                                    className="text-xs text-brand hover:text-brand-dark border border-brand/30 hover:border-brand px-2 py-1 rounded-md transition-colors"
                                   >
                                     Ver
                                   </a>
@@ -339,7 +339,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
               <div className="flex justify-end">
                 <button
                   onClick={() => setShowNuevoReclamante(true)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm bg-brand hover:bg-brand-dark text-white rounded-lg font-medium"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -355,12 +355,12 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
                     <div className="flex items-start justify-between mb-3">
                       <p className="font-semibold text-gray-800">
                         {`${r.nombre ?? ""} ${r.apellido ?? ""}`.trim() || "—"}
-                        {r.parentesco && <span className="ml-2 text-xs font-normal text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{r.parentesco}</span>}
+                        {r.parentesco && <span className="ml-2 text-xs font-normal text-brand bg-brand-50 px-2 py-0.5 rounded-full">{r.parentesco}</span>}
                       </p>
                       <div className="flex gap-2 flex-shrink-0 ml-3">
                         <button
                           onClick={() => setEditingReclamante(r)}
-                          className="text-xs text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-300 px-2 py-1 rounded-md transition-colors"
+                          className="text-xs text-gray-500 hover:text-brand border border-gray-200 hover:border-brand/50 px-2 py-1 rounded-md transition-colors"
                         >
                           Editar
                         </button>
@@ -485,7 +485,7 @@ function ReclamanteModal({
     onSaved();
   };
 
-  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand";
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -545,7 +545,7 @@ function ReclamanteModal({
             <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
               Cancelar
             </button>
-            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-brand hover:bg-brand-dark disabled:opacity-60 text-white rounded-lg">
               {saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Crear"}
             </button>
           </div>
@@ -579,7 +579,7 @@ function ArchivoModal({
     onSaved();
   };
 
-  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand";
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -630,7 +630,7 @@ function ArchivoModal({
             <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
               Cancelar
             </button>
-            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-brand hover:bg-brand-dark disabled:opacity-60 text-white rounded-lg">
               {saving ? "Guardando..." : "Guardar"}
             </button>
           </div>

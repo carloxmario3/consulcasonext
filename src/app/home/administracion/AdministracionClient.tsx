@@ -38,7 +38,7 @@ export function AdministracionClient({ analistas, investigadores, usuarios }: an
           {(["usuarios", "analistas", "investigadores"] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-5 py-3 text-sm font-medium capitalize transition-colors ${
-                tab === t ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"
+                tab === t ? "text-brand border-b-2 border-brand" : "text-gray-500 hover:text-gray-700"
               }`}>
               {t === "usuarios" ? "Usuarios" : t === "analistas" ? "Analistas" : "Investigadores"}
             </button>

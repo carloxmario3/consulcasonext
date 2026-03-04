@@ -39,7 +39,7 @@ export default async function CasoDetailPage({ params }: { params: Promise<{ id:
     <div className="space-y-5">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-gray-500">
-        <Link href="/home/casos" className="hover:text-blue-600">Casos</Link>
+        <Link href="/home/casos" className="hover:text-brand">Casos</Link>
         <span>/</span>
         <span className="text-gray-800 font-medium">Caso #{caso.id_numero_caso}</span>
       </div>

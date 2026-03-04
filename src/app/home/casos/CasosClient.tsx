@@ -77,7 +77,7 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -94,13 +94,13 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
             placeholder="Buscar por # caso, afiliado, cédula, analista, investigador..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
           />
         </div>
         <select
           value={estadoFilter}
           onChange={(e) => { setEstadoFilter(e.target.value); setPage(1); }}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
         >
           <option value="">Todos los estados</option>
           {estados.map((e) => (
@@ -110,7 +110,7 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
         <select
           value={tipocasoFilter}
           onChange={(e) => { setTipocasoFilter(e.target.value); setPage(1); }}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
         >
           <option value="">Todos los tipos</option>
           {tiposCaso.map((t) => (
@@ -148,7 +148,7 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
               ) : (
                 casos.map((caso) => (
                   <tr key={caso.id_numero_caso} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-mono font-semibold text-blue-700">
+                    <td className="px-4 py-3 font-mono font-semibold text-brand-dark">
                       #{caso.id_numero_caso}
                     </td>
                     <td className="px-4 py-3">
@@ -203,7 +203,7 @@ export function CasosClient({ estados, tiposCaso }: { estados: Estado[]; tiposCa
                     <td className="px-4 py-3">
                       <Link
                         href={`/home/casos/${caso.id_numero_caso}`}
-                        className="text-blue-600 hover:text-blue-800 font-medium text-xs"
+                        className="text-brand hover:text-brand-dark font-medium text-xs"
                       >
                         Ver detalle
                       </Link>
@@ -314,7 +314,7 @@ function NuevoCasoModal({
     onCreated();
   };
 
-  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand";
   const tabIdx = tabs.indexOf(tab);
   const isLast = tabIdx === tabs.length - 1;
   const isFirst = tabIdx === 0;
@@ -336,7 +336,7 @@ function NuevoCasoModal({
         <div className="flex border-b border-gray-200 flex-shrink-0 text-sm">
           {[["caso", "Datos del Caso"], ["afiliado", "Afiliado"], ["reclamantes", `Reclamantes${reclamantes.length ? ` (${reclamantes.length})` : ""}`]].map(([id, label]) => (
             <button key={id} type="button" onClick={() => setTab(id as typeof tabs[number])}
-              className={`px-5 py-2.5 font-medium transition-colors whitespace-nowrap ${tab === id ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"}`}>
+              className={`px-5 py-2.5 font-medium transition-colors whitespace-nowrap ${tab === id ? "text-brand border-b-2 border-brand" : "text-gray-500 hover:text-gray-700"}`}>
               {label}
             </button>
           ))}
@@ -485,7 +485,7 @@ function NuevoCasoModal({
                   </div>
                 ))}
                 <button type="button" onClick={addReclamante}
-                  className="w-full py-2.5 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors flex items-center justify-center gap-2">
+                  className="w-full py-2.5 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-brand hover:text-brand transition-colors flex items-center justify-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
@@ -501,7 +501,7 @@ function NuevoCasoModal({
             <div className="flex gap-1">
               {tabs.map(t => (
                 <button key={t} type="button" onClick={() => setTab(t)}
-                  className={`w-2 h-2 rounded-full transition-colors ${tab === t ? "bg-blue-600" : "bg-gray-300"}`} />
+                  className={`w-2 h-2 rounded-full transition-colors ${tab === t ? "bg-brand" : "bg-gray-300"}`} />
               ))}
             </div>
             <div className="flex gap-3">
@@ -514,11 +514,11 @@ function NuevoCasoModal({
                 </button>
               )}
               {isLast ? (
-                <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+                <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-brand hover:bg-brand-dark disabled:opacity-60 text-white rounded-lg">
                   {saving ? "Guardando..." : "Crear Caso"}
                 </button>
               ) : (
-                <button type="button" onClick={() => setTab(tabs[tabIdx + 1])} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                <button type="button" onClick={() => setTab(tabs[tabIdx + 1])} className="px-4 py-2 text-sm bg-brand hover:bg-brand-dark text-white rounded-lg">
                   Siguiente →
                 </button>
               )}

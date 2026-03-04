@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ConsulCaso - Sistema de Gestión",
-  description: "Sistema de gestión de casos de investigación",
+  title: "Consultando S.A.S - Sistema de Gestion",
+  description: "Sistema de gestion de casos - Consultores e Investigadores de Siniestros",
 };
 
 export default function RootLayout({
