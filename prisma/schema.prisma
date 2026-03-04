@@ -343,3 +343,13 @@ model TblGastos {
 
   @@map("tbl_gastos")
 }
+
+model TblEnlace {
+  nid_enlace       BigInt  @id @default(autoincrement())
+  t_nombre_archivo String? @db.VarChar(50)
+  t_numero_caso    String? @db.VarChar(50)
+  t_carpeta        String? @db.VarChar(50)
+  t_enlace         String?
+
+  @@map("tbl_enlace")
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CaratulaModal } from "./CaratulaModal";
 
 interface ReclamanteType {
@@ -15,6 +15,14 @@ interface ReclamanteType {
   barrio?: string | null;
 }
 
+interface ArchivoType {
+  nid_enlace: string;
+  t_nombre_archivo?: string | null;
+  t_numero_caso?: string | null;
+  t_carpeta?: string | null;
+  t_enlace?: string | null;
+}
+
 const ESTADO_COLORS: Record<string, string> = {
   Activo: "bg-green-100 text-green-800",
   Completo: "bg-blue-100 text-blue-800",
@@ -25,13 +33,35 @@ const ESTADO_COLORS: Record<string, string> = {
   PorEnviar: "bg-pink-100 text-pink-800",
 };
 
+const CARPETA_COLORS: Record<string, string> = {
+  Informes: "bg-blue-100 text-blue-800",
+  Anexos: "bg-orange-100 text-orange-800",
+  Videos: "bg-purple-100 text-purple-800",
+  Recuinve: "bg-gray-100 text-gray-700",
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CasoDetailClient({ caso, estados, analistas, investigadores }: any) {
-  const [activeTab, setActiveTab] = useState<"info" | "afiliados" | "reclamantes">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "afiliados" | "reclamantes" | "archivos">("info");
   const [showNuevoReclamante, setShowNuevoReclamante] = useState(false);
   const [editingReclamante, setEditingReclamante] = useState<ReclamanteType | null>(null);
   const [deletingReclamanteId, setDeletingReclamanteId] = useState<number | null>(null);
   const [reclamantes, setReclamantes] = useState<ReclamanteType[]>(caso.reclamantes ?? []);
+  const [archivos, setArchivos] = useState<ArchivoType[]>([]);
+  const [showNuevoArchivo, setShowNuevoArchivo] = useState(false);
+
+  useEffect(() => {
+    fetch(`/api/casos/${caso.id_numero_caso}/archivos`)
+      .then((r) => r.json())
+      .then((data) => setArchivos(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, [caso.id_numero_caso]);
+
+  const reloadArchivos = async () => {
+    const res = await fetch(`/api/casos/${caso.id_numero_caso}/archivos`);
+    const data = await res.json();
+    setArchivos(Array.isArray(data) ? data : []);
+  };
 
   const reloadReclamantes = async () => {
     const res = await fetch(`/api/casos/${caso.id_numero_caso}/reclamantes`);
@@ -79,6 +109,7 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
     { id: "info", label: "Información" },
     { id: "afiliados", label: `Afiliados (${caso.afiliados?.length ?? 0})` },
     { id: "reclamantes", label: `Reclamantes (${reclamantes.length})` },
+    { id: "archivos", label: `Archivos (${archivos.length})` },
   ];
 
   return (
@@ -236,6 +267,73 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
             </div>
           )}
 
+          {activeTab === "archivos" && (
+            <div className="space-y-4">
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowNuevoArchivo(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Agregar archivo
+                </button>
+              </div>
+              {archivos.length === 0 ? (
+                <p className="text-gray-400 text-sm">Sin archivos registrados</p>
+              ) : (
+                (() => {
+                  const grouped: Record<string, ArchivoType[]> = {};
+                  for (const a of archivos) {
+                    const carpeta = a.t_carpeta ?? "Sin carpeta";
+                    if (!grouped[carpeta]) grouped[carpeta] = [];
+                    grouped[carpeta].push(a);
+                  }
+                  return Object.entries(grouped).map(([carpeta, items]) => (
+                    <div key={carpeta}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${CARPETA_COLORS[carpeta] ?? "bg-gray-100 text-gray-600"}`}>
+                          {carpeta}
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        {items.map((archivo) => {
+                          const tieneEnlace = archivo.t_enlace && archivo.t_enlace !== "GenerandoEnlace";
+                          return (
+                            <div key={archivo.nid_enlace} className="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 text-sm">
+                              <span className="text-gray-800 font-medium truncate">{archivo.t_nombre_archivo ?? "Sin nombre"}</span>
+                              {tieneEnlace && (
+                                <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+                                  <a
+                                    href={`https://drive.google.com/file/d/${archivo.t_enlace}/view?usp=sharing`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-blue-600 hover:text-blue-800 border border-blue-200 hover:border-blue-400 px-2 py-1 rounded-md transition-colors"
+                                  >
+                                    Ver
+                                  </a>
+                                  <a
+                                    href={`https://drive.google.com/uc?export=download&id=${archivo.t_enlace}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-gray-500 hover:text-gray-700 border border-gray-200 hover:border-gray-400 px-2 py-1 rounded-md transition-colors"
+                                  >
+                                    Descargar
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ));
+                })()
+              )}
+            </div>
+          )}
+
           {activeTab === "reclamantes" && (
             <div className="space-y-3">
               <div className="flex justify-end">
@@ -330,6 +428,14 @@ export function CasoDetailClient({ caso, estados, analistas, investigadores }: a
           </div>
         </div>
       </div>
+    )}
+
+    {showNuevoArchivo && (
+      <ArchivoModal
+        casoId={caso.id_numero_caso}
+        onClose={() => setShowNuevoArchivo(false)}
+        onSaved={() => { setShowNuevoArchivo(false); reloadArchivos(); }}
+      />
     )}
     </>
   );
@@ -441,6 +547,91 @@ function ReclamanteModal({
             </button>
             <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
               {saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Crear"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function ArchivoModal({
+  casoId,
+  onClose,
+  onSaved,
+}: {
+  casoId: number;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [form, setForm] = useState({ nombre: "", carpeta: "Informes", enlace: "" });
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    await fetch(`/api/casos/${casoId}/archivos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    setSaving(false);
+    onSaved();
+  };
+
+  const ic = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-xl flex flex-col">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-bold text-gray-900">Agregar archivo</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del archivo</label>
+            <input
+              value={form.nombre}
+              onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+              className={ic}
+              placeholder="Ej: Informe final"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Carpeta</label>
+            <select
+              value={form.carpeta}
+              onChange={e => setForm(f => ({ ...f, carpeta: e.target.value }))}
+              className={ic}
+            >
+              <option>Informes</option>
+              <option>Anexos</option>
+              <option>Videos</option>
+              <option>Recuinve</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Link o ID de Google Drive</label>
+            <input
+              value={form.enlace}
+              onChange={e => setForm(f => ({ ...f, enlace: e.target.value }))}
+              className={ic}
+              placeholder="https://drive.google.com/file/d/… o solo el ID"
+              required
+            />
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+              Cancelar
+            </button>
+            <button type="submit" disabled={saving} className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg">
+              {saving ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>
