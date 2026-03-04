@@ -54,6 +54,28 @@ La base de datos PostgreSQL ya existe con datos reales — **no se debe modifica
 - Deploy automatico via Dokploy al pushear a `main`.
 - VM GCP: `35.229.105.139`, puerto 3001.
 
+## Codigo Legacy de Referencia
+La carpeta `legacy/` (gitignored, solo existe localmente) contiene el sistema ASP.NET original:
+- **`legacy/aspnet-original/`** — Codigo fuente completo (WebForms .aspx + .aspx.cs)
+- **`legacy/backup_consulbase73.sql`** — Dump SQL completo de la DB original
+
+### Carpetas clave del legacy
+| Carpeta/Archivo | Funcionalidad |
+|-----------------|---------------|
+| `ConsulCaso9/` | Modulo principal: gestion de casos, detalle, archivos |
+| `ContaCaso/` | Contabilidad, facturas, gastos |
+| `Administracion/` | Administracion de usuarios y configuracion |
+| `Busquedas.aspx.cs` | Busqueda avanzada de casos |
+| `App_Code/` | Clases compartidas, DAL, helpers |
+| `Web.config` | Connection strings, auth config IIS |
+
+### Como usar el legacy al migrar
+1. Identificar la pagina `.aspx.cs` que implementa la funcionalidad a migrar
+2. Revisar los queries SQL que ejecuta (buscar `SqlCommand`, `SqlDataReader`, etc.)
+3. Notar que campos muestra el UI y que validaciones aplica
+4. Verificar que tablas y columnas usa — mapearlas en `schema.prisma` con `@@map()`
+5. Consultar `backup_consulbase73.sql` para ver estructura de tablas no migradas aun
+
 ## Archivos Clave para Referencia
 | Archivo | Para que |
 |---------|----------|
@@ -66,3 +88,5 @@ La base de datos PostgreSQL ya existe con datos reales — **no se debe modifica
 | `src/app/home/casos/CasosClient.tsx` | Ejemplo completo de listado con paginacion |
 | `src/app/home/casos/[id]/CasoDetailClient.tsx` | Ejemplo de detalle con tabs y modales |
 | `src/app/api/casos/[id]/archivos/route.ts` | Ejemplo de API route con try/catch |
+| `legacy/aspnet-original/` | Codigo fuente ASP.NET original (referencia para migracion) |
+| `legacy/backup_consulbase73.sql` | Backup DB original (estructura de tablas no migradas) |

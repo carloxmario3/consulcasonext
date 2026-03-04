@@ -57,6 +57,9 @@ src/
     next-auth.d.ts          # Tipos extendidos para session.user.roles
 prisma/
   schema.prisma             # Todos los modelos (mapean tablas existentes)
+legacy/                     # (gitignored) Referencia local
+  aspnet-original/          # Codigo fuente ASP.NET completo del sistema anterior
+  backup_consulbase73.sql   # Backup de la base de datos original
 ```
 
 ## Colores de Marca (globals.css @theme)
@@ -115,6 +118,27 @@ npm run build        # Build de produccion (standalone)
 npx prisma generate  # Regenerar cliente Prisma (NO usar migrate)
 npx prisma studio    # UI para inspeccionar datos
 ```
+
+## Codigo Legacy de Referencia
+La carpeta `legacy/` (gitignored, solo local) contiene:
+- **`aspnet-original/`** — Codigo fuente completo del sistema ASP.NET anterior
+  - Paginas `.aspx` + code-behind `.aspx.cs` (WebForms)
+  - Carpetas clave: `ConsulCaso9/` (modulo principal de casos), `ContaCaso/` (contabilidad), `Administracion/`, `Busquedas.aspx`
+  - `App_Code/` — clases compartidas, conexion a DB, helpers
+  - `Web.config` — connection strings y configuracion IIS
+  - `Bin/` — DLLs compiladas (Telerik, etc.)
+- **`backup_consulbase73.sql`** — Dump SQL de la base de datos original (PostgreSQL)
+  - Contiene la estructura completa de todas las tablas y datos
+  - Util para consultar tablas que aun no se han migrado a Prisma
+
+### Como usar el legacy como referencia
+Al migrar funcionalidad, buscar la pagina `.aspx.cs` correspondiente para entender:
+- Que queries SQL ejecutaba
+- Que campos mostraba en el UI
+- Que validaciones aplicaba
+- Que tablas y relaciones usaba
+
+Ejemplo: para migrar la pantalla de seguimientos, revisar `ConsulCaso9/Seguimientos.aspx.cs`.
 
 ## Notas Importantes
 - NUNCA usar `prisma migrate` — la DB es legacy y se rompen constraints
