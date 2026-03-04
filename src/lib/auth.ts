@@ -4,6 +4,21 @@ import { prisma } from "./prisma";
 import crypto from "crypto";
 
 /**
+ * Genera hash de contraseña compatible con ASP.NET Membership (SHA1 + salt)
+ */
+export function hashAspNetPassword(password: string) {
+  const saltBytes = crypto.randomBytes(16);
+  const passwordBytes = Buffer.from(password, "utf16le");
+  const combined = Buffer.concat([saltBytes, passwordBytes]);
+  const hash = crypto.createHash("sha1").update(combined).digest("base64");
+  return {
+    password: hash,
+    passwordSalt: saltBytes.toString("base64"),
+    passwordFormat: 1,
+  };
+}
+
+/**
  * Verifica contraseña de ASP.NET Membership
  * Format 0 = Clear text
  * Format 1 = SHA1 hashed with salt (Base64)
